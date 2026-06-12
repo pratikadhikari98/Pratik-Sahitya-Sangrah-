@@ -670,11 +670,11 @@ const KAVITA_DATA = [
   id: "k007",
     title: "दूरी",
     category: "kabita",
-    tags: ["दप्रेम", "त्याग", "माया","सपना"],
-    cover: "covers/दूरी.png",
+    tags: ["प्रेम", "त्याग", "माया","सपना"],
+    cover: "covers/file_00000000dc0071fa9f71022f26d534bf.png",
     coverEmoji: "👬",
     date: "2025-03-05",
-    readTime: "३ मिनेट",
+    readTime: "उपजाति",
     featured: false,
     content:`
 
