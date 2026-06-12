@@ -10,7 +10,7 @@ const KAVITA_DATA = [
     title: " राष्ट्र प्रेम ",
     category: "kavita",
     tags: ["देश", "राष्ट्र प्रेम", " इतिहास"],
-    cover: " covers/1776177925119.png", // "covers/k001.jpg" राख्नुस् - नभए emoji देखिन्छ
+    cover: "covers/file_00000000b9f87206b99cd055ed185f24.png", // "covers/k001.jpg" राख्नुस् - नभए emoji देखिन्छ
     coverEmoji: "🏔️",
     date: "2024-12-01",
     readTime: "शार्दूविक्रीडितम्",
