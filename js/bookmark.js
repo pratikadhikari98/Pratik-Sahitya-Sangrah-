@@ -53,10 +53,10 @@ function showBookmarks() {
   document.getElementById('bookmarkModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Add history entry so back-swipe closes modal instead of exiting app
-  if (!history.state || history.state.modal !== 'bookmark') {
-    history.pushState({ modal: 'bookmark' }, '');
-  }
+  // Add history entry so back-swipe closes modal instead of exiting app.
+  // Deferred via setTimeout so it doesn't collide with closeDropdown()'s
+  // history.back() call that may have just fired above.
+  setTimeout(() => pushOverlayState('bookmark'), 0);
 }
 
 function removeBookmark(id) {
@@ -67,12 +67,11 @@ function removeBookmark(id) {
 }
 
 function closeBookmarkModal() {
+  if (!document.getElementById('bookmarkModal').classList.contains('open')) return;
   document.getElementById('bookmarkModal').classList.remove('open');
   document.body.style.overflow = '';
 
-  if (history.state && history.state.modal === 'bookmark') {
-    history.back();
-  }
+  popOverlayStateIfMatches('bookmark');
 }
 
 // ===== TOAST =====

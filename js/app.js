@@ -419,20 +419,16 @@ function openPoem(id) {
   document.body.style.overflow = 'hidden';
 
   // Add a history entry so back-swipe/back-button closes modal instead of exiting app
-  if (!history.state || history.state.modal !== 'poem') {
-    history.pushState({ modal: 'poem' }, '');
-  }
+  pushOverlayState('poem');
 }
 
 function closeModal() {
+  if (!document.getElementById('poemModal').classList.contains('open')) return;
   document.getElementById('poemModal').classList.remove('open');
   document.body.style.overflow = '';
   currentPoem = null;
 
-  // If we're still on the "poem" history state, go back to clean it up
-  if (history.state && history.state.modal === 'poem') {
-    history.back();
-  }
+  popOverlayStateIfMatches('poem');
 }
 
 function filterByTagFromModal(tag) {
@@ -470,14 +466,7 @@ function setupMenu() {
     const dropdown = document.getElementById('dropdownMenu');
     const opening = !dropdown.classList.contains('open');
     dropdown.classList.toggle('open');
-
-    if (opening) {
-      if (!history.state || history.state.modal !== 'menu') {
-        history.pushState({ modal: 'menu' }, '');
-      }
-    } else if (history.state && history.state.modal === 'menu') {
-      history.back();
-    }
+    if (opening) pushOverlayState('menu');
   });
   document.addEventListener('click', closeDropdown);
   document.getElementById('dropdownMenu').addEventListener('click', e => e.stopPropagation());
@@ -492,10 +481,21 @@ function setupMenu() {
 
 function closeDropdown() {
   const dropdown = document.getElementById('dropdownMenu');
-  const wasOpen = dropdown.classList.contains('open');
+  if (!dropdown.classList.contains('open')) return;
   dropdown.classList.remove('open');
+  popOverlayStateIfMatches('menu');
+}
 
-  if (wasOpen && history.state && history.state.modal === 'menu') {
+// ===== Shared overlay history helper =====
+// Used by poem modal, bookmark modal, and dropdown menu so back-swipe/back-button
+// closes the topmost overlay instead of exiting the app.
+function pushOverlayState(name) {
+  if (!history.state || history.state.overlay !== name) {
+    history.pushState({ overlay: name }, '');
+  }
+}
+function popOverlayStateIfMatches(name) {
+  if (history.state && history.state.overlay === name) {
     history.back();
   }
 }
