@@ -1,0 +1,315 @@
+/* ===== ABOUT PAGE — Magazine Style CSS ===== */
+
+/* HERO */
+.about-hero {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.about-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  transform: scale(1.05);
+  animation: heroZoom 12s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1.12); }
+}
+
+.about-hero-bg.no-photo {
+  background: linear-gradient(135deg, #1a2744 0%, #2d4a8a 40%, #e8690a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.05) 0%,
+    rgba(0,0,0,0.25) 40%,
+    rgba(0,0,0,0.82) 100%
+  );
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 28px 20px;
+  width: 100%;
+}
+
+.about-hero-quote {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.6;
+  margin-bottom: 4px;
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+}
+
+.about-hero-quote-author {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 16px;
+  padding-left: 15px;
+}
+
+.about-hero-name {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 36px;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.about-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.72);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.about-dot { opacity: 0.4; }
+
+/* STATS */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: var(--card-bg);
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 8px;
+  border-right: 1px solid var(--border);
+  animation: fadeUp 0.5s ease both;
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-number {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 28px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* SECTIONS */
+.about-section {
+  padding: 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-section:last-of-type { border-bottom: none; }
+
+.about-section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+/* BIO */
+.about-bio {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 16px;
+  line-height: 2;
+  color: var(--text);
+  white-space: pre-line;
+}
+
+/* TIMELINE */
+.about-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  padding-bottom: 20px;
+  animation: fadeUp 0.4s ease both;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48px;
+  flex-shrink: 0;
+}
+
+.timeline-year {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.timeline-line {
+  flex: 1;
+  width: 2px;
+  background: var(--border);
+  margin-top: 6px;
+}
+
+.timeline-item:last-child .timeline-line { display: none; }
+
+.timeline-dot {
+  position: absolute;
+  left: 44px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.timeline-text {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  padding-top: 2px;
+  padding-left: 12px;
+}
+
+/* CONTACT */
+.about-contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.contact-btn:hover {
+  border-color: var(--accent);
+  background: var(--bg3);
+  transform: translateY(-2px);
+}
+
+.contact-btn .c-icon { font-size: 20px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.contact-btn .c-label { font-size: 11px; color: var(--text2); }
+.contact-btn .c-name { font-weight: 600; font-size: 13px; }
+
+.contact-btn-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.about-contact-section { margin-top: 6px; }
+
+/* PHOTO DESCRIPTION (below hero photo) — elegant quote-card style */
+.about-photo-desc {
+  margin: -28px 16px 0;
+  position: relative;
+  z-index: 3;
+  padding: 18px 20px;
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text);
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow);
+  border-left: 4px solid var(--accent2);
+}
+.about-photo-desc:empty { display: none; }
+
+/* ===== ROTATING WHEEL SECTION ===== */
+.wheel-section {
+  background: var(--bg2);
+  padding: 24px 0 16px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+.wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.wheel-svg-wrap {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.wheel-svg-wrap:active { cursor: grabbing; }
+.wheel-svg-wrap svg { width: 100%; height: 100%; overflow: visible; }
+.spin-hint {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--text2);
+  font-family: 'Noto Serif Devanagari', serif;
+}
+
+/* ===== KALIKA FONT OVERRIDE — applies on about page too ===== */
+[data-htheme="kalika"],
+[data-htheme="kalika"] * {
+  font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif !important;
+}

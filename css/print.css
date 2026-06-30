@@ -1,0 +1,31 @@
+@media print {
+  .header, .bottom-nav, .category-tabs, .tag-filter-wrap,
+  .modal-header, .modal-actions, .share-modal, .toast,
+  .hero-section, .section-header .random-btn,
+  .card-read-btn, .dropdown-menu, .search-bar-wrap { display: none !important; }
+
+  body { background: #fff !important; color: #000 !important; padding: 0; }
+
+  .modal-overlay {
+    position: static !important;
+    transform: none !important;
+    background: #fff !important;
+  }
+
+  .poem-content {
+    font-size: 14pt !important;
+    line-height: 1.8 !important;
+    color: #000 !important;
+  }
+
+  .poem-title-large {
+    font-size: 20pt !important;
+    color: #000 !important;
+  }
+
+  .poem-cover-large { display: none !important; }
+
+  @page {
+    margin: 2cm;
+  }
+}
