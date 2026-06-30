@@ -3,9 +3,6 @@
 // ============================================================
 
 const ABOUT_DATA = {
-  name: "प्रतीक",
-  subtitle: "कवि • लेखक • विचारक",
-  location: "पोखरा, नेपाल",
   photo: "covers/about-photo.jpg",   // ← आफ्नो photo यहाँ राख्नुस्
   photoEmoji: "✍️",                  // photo नभए यो देखिन्छ
   contact: {
