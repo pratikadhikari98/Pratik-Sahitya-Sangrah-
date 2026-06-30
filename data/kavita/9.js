@@ -4,7 +4,7 @@ KAVITA_DATA.push({
   title: "साथि",
   category: "kavita",
   tags: ["प्रेम", "साथ", "मित्रता", "बन्धुत्व"],
-  cover: "",
+  cover: "covers/file_00000000c43871faa32385812689134b.png",
   coverEmoji: "👬",
   date: "2025-03-05",
   readTime: "३ मिनेट",
