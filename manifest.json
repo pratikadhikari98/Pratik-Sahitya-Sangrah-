@@ -1,0 +1,43 @@
+{
+  "name": "प्रतीक साहित्य संग्रह",
+  "short_name": "प्रतीक साहित्य",
+  "description": "प्रतीक थापाको कविता, लेख र गजलको डिजिटल सङ्ग्रह",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1e1432",
+  "theme_color": "#2d1e46",
+  "orientation": "portrait-primary",
+  "lang": "ne",
+  "categories": ["books", "education", "entertainment"],
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "अनियमित कविता",
+      "short_name": "अनियमित",
+      "description": "अनियमित कविता पढ्नुस्",
+      "url": "./index.html#random",
+      "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "सेभ गरिएका",
+      "short_name": "Bookmarks",
+      "description": "सेभ गरिएका कविताहरू",
+      "url": "./index.html#bookmarks",
+      "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

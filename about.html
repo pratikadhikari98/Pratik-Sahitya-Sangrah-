@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ne" data-theme="light" data-htheme="kalika">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>बारेमा — प्रतीक साहित्य संग्रह</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2d1e46" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/about.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700&family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <button class="icon-btn back-btn" onclick="history.back()">
+      ← <span style="font-size:13px;">फर्कनुस्</span>
+    </button>
+  </div>
+  <div class="header-left">
+    <div class="logo-text">
+      <span class="logo-main">बारेमा</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+
+<!-- ROTATING WHEEL -->
+<section class="wheel-section">
+  <div class="wheel-container">
+    <div class="wheel-svg-wrap" id="wheelWrap">
+      <svg viewBox="-5 -5 330 330" xmlns="http://www.w3.org/2000/svg" id="wheelSvg">
+        <!-- Rotating group -->
+        <g id="wheelGroup" transform="rotate(0,160,160)">
+
+          <!-- Segment 1 -->
+          <path fill="#dbeafe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 174.14,21.50 A 128,128 0 0,1 259.47,62.60 L 203.50,114.01 A 52,52 0 0,0 168.83,97.32 Z"/>
+          <text transform="translate(204.3,68.1) rotate(25.7)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">कविता</tspan>
+            <tspan x="0" dy="13">संग्रह</tspan>
+          </text>
+
+          <!-- Segment 2 -->
+          <path fill="#bfdbfe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 277.10,84.70 A 128,128 0 0,1 298.17,177.04 L 223.08,165.34 A 52,52 0 0,0 214.52,127.82 Z"/>
+          <text transform="translate(259.4,137.3) rotate(77.1)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">लेख तथा</tspan>
+            <tspan x="0" dy="13">निबन्ध</tspan>
+          </text>
+
+          <!-- Segment 3 -->
+          <path fill="#dbeafe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 291.88,204.60 A 128,128 0 0,1 232.83,278.65 L 195.16,212.64 A 52,52 0 0,0 219.15,182.56 Z"/>
+          <text transform="translate(239.7,223.6) rotate(128.6)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">गजल</tspan>
+            <tspan x="0" dy="13">रचना</tspan>
+          </text>
+
+          <!-- Segment 4 -->
+          <path fill="#bfdbfe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 207.36,290.92 A 128,128 0 0,1 112.64,290.92 L 140.76,220.31 A 52,52 0 0,0 179.24,220.31 Z"/>
+          <text transform="translate(160.0,262.0) rotate(180)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">साहित्य</tspan>
+            <tspan x="0" dy="13">चिन्तन</tspan>
+          </text>
+
+          <!-- Segment 5 -->
+          <path fill="#dbeafe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 87.17,278.65 A 128,128 0 0,1 28.12,204.60 L 100.85,182.56 A 52,52 0 0,0 124.84,212.64 Z"/>
+          <text transform="translate(80.3,223.6) rotate(231.4)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">अनियमित</tspan>
+            <tspan x="0" dy="13">रचना</tspan>
+          </text>
+
+          <!-- Segment 6 -->
+          <path fill="#bfdbfe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 21.83,177.04 A 128,128 0 0,1 42.90,84.70 L 105.48,127.82 A 52,52 0 0,0 96.92,165.34 Z"/>
+          <text transform="translate(60.6,137.3) rotate(-77.1)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">सेभ गरिएका</tspan>
+            <tspan x="0" dy="13">रचना</tspan>
+          </text>
+
+          <!-- Segment 7 -->
+          <path fill="#dbeafe" stroke="#1e5aa8" stroke-width="2" stroke-linejoin="round" d="M 60.53,62.60 A 128,128 0 0,1 145.86,21.50 L 151.17,97.32 A 52,52 0 0,0 116.50,114.01 Z"/>
+          <text transform="translate(115.7,68.1) rotate(-25.7)" text-anchor="middle" font-size="8.5" fill="#1a3a6b" font-family="Noto Sans Devanagari,sans-serif" font-weight="bold">
+            <tspan x="0" dy="-5">प्रतीक</tspan>
+            <tspan x="0" dy="13">बारेमा</tspan>
+          </text>
+
+        </g><!-- end wheelGroup -->
+
+        <!-- STATIC CENTER — analogue clock -->
+        <defs>
+          <radialGradient id="clockFace" cx="40%" cy="35%" r="70%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#dbeafe"/>
+          </radialGradient>
+          <radialGradient id="clockCenterDot" cx="50%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#1e5aa8"/>
+            <stop offset="100%" stop-color="#1a3a6b"/>
+          </radialGradient>
+        </defs>
+        <!-- Face -->
+        <circle cx="160" cy="160" r="52" fill="url(#clockFace)" stroke="#1e5aa8" stroke-width="2.5"/>
+        <circle cx="160" cy="160" r="48" fill="none" stroke="#bfdbfe" stroke-width="1"/>
+        <!-- Tick marks + numbers -->
+        <g id="clockTicks"></g>
+        <!-- OM -->
+        <text x="160" y="140" text-anchor="middle" font-size="7" fill="#1a3a6b" opacity="0.18" font-family="serif">ॐ</text>
+        <!-- Hands -->
+        <line id="wHourHand"   x1="160" y1="160" x2="160" y2="128" stroke="#1a3a6b" stroke-width="3.5" stroke-linecap="round"/>
+        <line id="wMinuteHand" x1="160" y1="160" x2="160" y2="117" stroke="#1e5aa8" stroke-width="2.5" stroke-linecap="round"/>
+        <line id="wSecondHand" x1="160" y1="168" x2="160" y2="113" stroke="#b91c1c" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Center dot -->
+        <circle cx="160" cy="160" r="4" fill="url(#clockCenterDot)"/>
+        <circle cx="160" cy="160" r="2" fill="#3b82d1"/>
+        <circle cx="160" cy="160" r="0.8" fill="white"/>
+      </svg>
+    </div>
+    <div class="spin-hint" id="wheelDigitalTime">--:--:-- --</div>
+  </div>
+</section>
+
+<!-- HERO PHOTO SECTION -->
+<section class="about-hero" id="aboutHero">
+  <div class="about-hero-bg" id="aboutHeroBg"></div>
+  <div class="about-hero-overlay"></div>
+  <div class="about-hero-content">
+    <div class="about-hero-quote" id="aboutQuote"></div>
+    <div class="about-hero-quote-author" id="aboutQuoteAuthor"></div>
+    <h1 class="about-hero-name" id="aboutName"></h1>
+    <div class="about-hero-meta">
+      <span id="aboutSubtitle"></span>
+      <span class="about-dot">•</span>
+      <span id="aboutLocation">📍 </span>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO DESCRIPTION -->
+<section class="about-photo-desc" id="aboutPhotoDesc"></section>
+
+<!-- CONTACT -->
+<section class="about-section about-contact-section">
+  <div class="about-section-label">📬 सम्पर्क</div>
+  <div class="about-contact" id="aboutContact"></div>
+</section>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item" onclick="location.href='index.html'">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">गृहपृष्ठ</span>
+  </button>
+  <button class="nav-item" onclick="location.href='index.html#bookmarks'">
+    <span class="nav-icon">🔖</span>
+    <span class="nav-label">सेभ</span>
+  </button>
+  <button class="nav-item" onclick="location.href='index.html#random'">
+    <span class="nav-icon">🎲</span>
+    <span class="nav-label">अनियमित</span>
+  </button>
+  <button class="nav-item active">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">बारेमा</span>
+  </button>
+</nav>
+
+<script src="data/kavita.js"></script>
+<script src="data/about.js"></script>
+<script src="data/description.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/wheel.js"></script>
+<script src="js/about.js"></script>
+</body>
+</html>
