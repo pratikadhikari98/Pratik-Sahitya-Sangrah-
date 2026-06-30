@@ -4,7 +4,7 @@ KAVITA_DATA.push({
   title: "गजेन्द्रमोक्ष",
   category: "kavita",
   tags: ["भक्ति", "साधना", "त्याग"],
-  cover: "covers/गजेन्द्रमोक्ष.png",
+  cover: "covers/Gm.png",
   coverEmoji: "🌧️",
   date: "2025-03-15",
   readTime: "खण्ड काव्य",
