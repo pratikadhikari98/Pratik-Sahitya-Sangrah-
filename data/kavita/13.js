@@ -4,7 +4,7 @@ KAVITA_DATA.push({
   title: " आत्मबोध",
   category: "kavita",
   tags: ["गुरुभक्ति", "चिन्तन", "ज्ञान", "यथार्थ"],
-  cover: "",
+  cover: "covers/file_0000000064b...f239865232bd.png",
   coverEmoji: "🏔️",
   date: "2025-03-05",
   readTime: "उपजाति",
