@@ -4,7 +4,7 @@ KAVITA_DATA.push({
   title: " मुसाको पीडा",
   category: "kavita",
   tags: ["व्यङ्ग्य", "सामाजिक यथार्थ", "ज्ञान", "हास्य"],
-  cover: "",
+  cover: "covers/1782910127646.png",
   coverEmoji: "🏔️",
   date: "2025-03-05",
   readTime: "शार्दूलविक्रीडितम्",
