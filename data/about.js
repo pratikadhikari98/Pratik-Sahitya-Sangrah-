@@ -22,9 +22,9 @@ const ABOUT_DATA = {
   ],
 
   contact: {
-    facebook: "https://facebook.com/",    // ← आफ्नो Facebook link राख्नुस्
+    facebook: "https://www.facebook.com/share/14dmDgQM7T7/",    // ← आफ्नो Facebook link राख्नुस्
     youtube: "https://youtube.com/",      // ← आफ्नो YouTube link राख्नुस्
-    email: "your@email.com"               // ← आफ्नो Gmail address राख्नुस्
+    email: "apratik055@gmail.com"               // ← आफ्नो Gmail address राख्नुस्
   }
 };
 
