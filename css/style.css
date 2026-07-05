@@ -32,7 +32,7 @@ button:active, .tab:active, .card:active,
   --radius: 16px;
   --radius-sm: 10px;
   --modal-bg: #e8f4fd;
-  --nav-bg: rgba(255, 255, 255, 0.5);
+  --nav-bg: rgba(255, 255, 255, 0.18);
   --nav-border: #b0d8f0;
   --tag-bg: #d0eaf9;
   --tag-active: #0c6ea8;
@@ -58,7 +58,7 @@ button:active, .tab:active, .card:active,
   --tab-active: #3bb0e8;
   --tab-text: #3a7a9c;
   --modal-bg: #091929;
-  --nav-bg: rgba(13, 34, 53, 0.5);
+  --nav-bg: rgba(13, 34, 53, 0.18);
   --nav-border: #1a3a55;
   --tag-bg: #102c44;
   --tag-active: #3bb0e8;
@@ -676,8 +676,8 @@ input:checked + .slider::before { transform: translateX(18px); }
   bottom: 0; left: 0; right: 0;
   z-index: 100;
   background: var(--nav-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid var(--nav-border);
   display: flex;
   align-items: center;
