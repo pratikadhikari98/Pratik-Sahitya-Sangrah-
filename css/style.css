@@ -32,7 +32,7 @@ button:active, .tab:active, .card:active,
   --radius: 16px;
   --radius-sm: 10px;
   --modal-bg: #e8f4fd;
-  --nav-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.5);
   --nav-border: #b0d8f0;
   --tag-bg: #d0eaf9;
   --tag-active: #0c6ea8;
@@ -58,7 +58,7 @@ button:active, .tab:active, .card:active,
   --tab-active: #3bb0e8;
   --tab-text: #3a7a9c;
   --modal-bg: #091929;
-  --nav-bg: #0d2235;
+  --nav-bg: rgba(13, 34, 53, 0.5);
   --nav-border: #1a3a55;
   --tag-bg: #102c44;
   --tag-active: #3bb0e8;
@@ -676,13 +676,30 @@ input:checked + .slider::before { transform: translateX(18px); }
   bottom: 0; left: 0; right: 0;
   z-index: 100;
   background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--nav-border);
   display: flex;
   align-items: center;
   padding: 8px 0;
   box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
 }
+.nav-pill {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 0;
+  border-radius: 999px;
+  background: rgba(12, 110, 168, 0.18);
+  background: color-mix(in srgb, var(--accent2) 18%, transparent);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), width 0.35s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+  z-index: 0;
+}
 .nav-item {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
