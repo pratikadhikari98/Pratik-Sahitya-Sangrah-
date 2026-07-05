@@ -1,4 +1,4 @@
-/* ===== AI CHAT WIDGET ===== */
+/* ===== AI CHAT WIDGET (Kalika theme) ===== */
 #chat-toggle-btn {
   position: fixed;
   bottom: 20px;
@@ -6,15 +6,24 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #7c3aed;
+  background: linear-gradient(135deg, var(--accent2, #1e5aa8), var(--accent, #b91c1c));
   color: #fff;
   border: none;
-  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   cursor: grab;
   box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   z-index: 9999;
   touch-action: none;
   user-select: none;
+}
+
+#chat-toggle-btn svg {
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
 }
 
 #chat-toggle-btn.dragging {
@@ -46,7 +55,7 @@
 }
 
 #chat-header {
-  background: rgba(124, 58, 237, 0.85);
+  background: var(--accent2, #1e5aa8);
   color: #fff;
   padding: 12px 14px;
   font-weight: 600;
@@ -84,7 +93,7 @@
 
 .chat-msg.user {
   align-self: flex-end;
-  background: rgba(124, 58, 237, 0.9);
+  background: var(--accent2, #1e5aa8);
   color: #fff;
 }
 
@@ -113,7 +122,7 @@
 
 #chat-send {
   border: none;
-  background: rgba(124, 58, 237, 0.9);
+  background: var(--accent2, #1e5aa8);
   color: #fff;
   padding: 0 16px;
   cursor: pointer;
