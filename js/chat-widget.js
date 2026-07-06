@@ -1,7 +1,7 @@
 // ===== AI CHAT WIDGET (सिधै browser बाट Gemini API, backend बिना) =====
 // यहाँ आफ्नो Google AI Studio API key राख्नुहोस्
-const GEMINI_API_KEY = "AQ.Ab8RN6K52LXZM2o4uAWYgNp35yWnAZjRzL2msl0zR3MdmcXfBA";
-const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_API_KEY = "YOUR_GOOGLE_API_KEY_HERE";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
 const MAX_POEMS_PER_REQUEST = 2;
@@ -190,7 +190,7 @@ function buildChatWidget() {
       chatHistory.push({ role: "model", parts: [{ text: replyText }] });
       chatHistory = chatHistory.slice(-MAX_HISTORY_MESSAGES);
     } catch (err) {
-      addMessage("त्रुटि भयो, पछि फेरि प्रयास गर्नुहोस्।", "bot");
+      addMessage("त्रुटि: " + err.message, "bot");
       console.error("[chat-widget]", err);
     } finally {
       sendBtn.disabled = false;
