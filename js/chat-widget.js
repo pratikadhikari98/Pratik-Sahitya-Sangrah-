@@ -1,11 +1,9 @@
-// ===== AI CHAT WIDGET =====
+// ===== AI CHAT WIDGET (bottom nav मा जोडिएको) =====
 const CHAT_API_URL = "https://shastri-backend-chatbot.onrender.com/chat";
 
 const sessionId = "session-" + Math.random().toString(36).slice(2);
-const POSITION_KEY = "chatWidgetCorner"; // 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-const CORNER_MARGIN = 20;
 
-// यहाँ आफ्नो custom SVG icon (chat bubble) राख्न सकिन्छ — यो <svg>...</svg> replace गर्नुहोस्
+// यहाँ आफ्नो custom SVG icon राख्न सकिन्छ
 const CHAT_ICON_SVG = `
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path opacity="0.4" d="M16.1898 2H7.81976C4.17976 2 2.00977 4.17 2.00977 7.81V16.18C2.00977 19.82 4.17976 21.99 7.81976 21.99H16.1898C19.8298 21.99 21.9998 19.82 21.9998 16.18V7.81C21.9998 4.17 19.8298 2 16.1898 2Z" fill="currentColor"/>
@@ -14,10 +12,11 @@ const CHAT_ICON_SVG = `
 </svg>`;
 
 function buildChatWidget() {
-  const toggleBtn = document.createElement("button");
-  toggleBtn.id = "chat-toggle-btn";
-  toggleBtn.innerHTML = CHAT_ICON_SVG;
-  toggleBtn.setAttribute("aria-label", "AI सहायकसँग कुरा गर्नुहोस्");
+  const navBtn = document.getElementById("chat-nav-btn");
+  const navIcon = document.getElementById("chat-nav-icon");
+  if (!navBtn || !navIcon) return;
+
+  navIcon.innerHTML = CHAT_ICON_SVG;
 
   const panel = document.createElement("div");
   panel.id = "chat-panel";
@@ -32,144 +31,40 @@ function buildChatWidget() {
       <button id="chat-send">पठाउनुहोस्</button>
     </div>
   `;
-
-  document.body.appendChild(toggleBtn);
   document.body.appendChild(panel);
 
-  // ===== कुनाहरूको coordinate निकाल्ने =====
-  function getCornerPosition(corner) {
-    const btnW = toggleBtn.offsetWidth || 56;
-    const btnH = toggleBtn.offsetHeight || 56;
-    const positions = {
-      "top-left": { left: CORNER_MARGIN, top: CORNER_MARGIN },
-      "top-right": { left: window.innerWidth - btnW - CORNER_MARGIN, top: CORNER_MARGIN },
-      "bottom-left": { left: CORNER_MARGIN, top: window.innerHeight - btnH - CORNER_MARGIN },
-      "bottom-right": { left: window.innerWidth - btnW - CORNER_MARGIN, top: window.innerHeight - btnH - CORNER_MARGIN },
-    };
-    return positions[corner] || positions["bottom-right"];
-  }
-
-  function nearestCorner(left, top) {
-    const btnW = toggleBtn.offsetWidth || 56;
-    const btnH = toggleBtn.offsetHeight || 56;
-    const centerX = left + btnW / 2;
-    const centerY = top + btnH / 2;
-    const isLeft = centerX < window.innerWidth / 2;
-    const isTop = centerY < window.innerHeight / 2;
-    if (isTop && isLeft) return "top-left";
-    if (isTop && !isLeft) return "top-right";
-    if (!isTop && isLeft) return "bottom-left";
-    return "bottom-right";
-  }
-
-  function setButtonPosition(left, top) {
-    toggleBtn.style.left = left + "px";
-    toggleBtn.style.top = top + "px";
-    toggleBtn.style.right = "auto";
-    toggleBtn.style.bottom = "auto";
-  }
-
-  function moveToCorner(corner, animate) {
-    const pos = getCornerPosition(corner);
-    if (animate) {
-      toggleBtn.style.transition = "left 0.25s ease, top 0.25s ease";
-      setTimeout(() => (toggleBtn.style.transition = ""), 260);
-    }
-    setButtonPosition(pos.left, pos.top);
-    positionPanelNearButton(pos.left, pos.top, corner);
-    try {
-      localStorage.setItem(POSITION_KEY, corner);
-    } catch (e) {}
-  }
-
-  function positionPanelNearButton(btnLeft, btnTop, corner) {
+  function positionPanelAboveNav() {
+    const rect = navBtn.getBoundingClientRect();
+    const margin = 10;
     const panelWidth = panel.offsetWidth || 320;
     const panelHeight = panel.offsetHeight || 420;
-    const margin = 10;
 
-    const isLeftCorner = corner.includes("left");
-    const isTopCorner = corner.includes("top");
+    let left = rect.left + rect.width / 2 - panelWidth / 2;
+    left = Math.min(Math.max(margin, left), window.innerWidth - panelWidth - margin);
 
-    let panelLeft = isLeftCorner ? btnLeft : btnLeft + toggleBtn.offsetWidth - panelWidth;
-    panelLeft = Math.min(Math.max(margin, panelLeft), window.innerWidth - panelWidth - margin);
+    const top = rect.top - panelHeight - margin;
 
-    let panelTop = isTopCorner
-      ? btnTop + toggleBtn.offsetHeight + margin
-      : btnTop - panelHeight - margin;
-    panelTop = Math.min(Math.max(margin, panelTop), window.innerHeight - panelHeight - margin);
-
-    panel.style.left = panelLeft + "px";
-    panel.style.top = panelTop + "px";
+    panel.style.left = left + "px";
+    panel.style.top = Math.max(margin, top) + "px";
     panel.style.right = "auto";
     panel.style.bottom = "auto";
   }
 
-  let currentCorner = "bottom-right";
-  try {
-    const saved = localStorage.getItem(POSITION_KEY);
-    if (saved) currentCorner = saved;
-  } catch (e) {}
-
-  requestAnimationFrame(() => moveToCorner(currentCorner, false));
-
-  // ===== Drag गर्ने functionality (मात्र चारै कुनामा snap हुने) =====
-  let dragging = false;
-  let moved = false;
-  let startX, startY, startLeft, startTop;
-
-  function onDragStart(clientX, clientY) {
-    dragging = true;
-    moved = false;
-    toggleBtn.classList.add("dragging");
-    startX = clientX;
-    startY = clientY;
-    const rect = toggleBtn.getBoundingClientRect();
-    startLeft = rect.left;
-    startTop = rect.top;
-  }
-
-  function onDragMove(clientX, clientY) {
-    if (!dragging) return;
-    const dx = clientX - startX;
-    const dy = clientY - startY;
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-    setButtonPosition(startLeft + dx, startTop + dy);
-  }
-
-  function onDragEnd() {
-    if (!dragging) return;
-    dragging = false;
-    toggleBtn.classList.remove("dragging");
-    const rect = toggleBtn.getBoundingClientRect();
-    currentCorner = nearestCorner(rect.left, rect.top);
-    moveToCorner(currentCorner, true);
-  }
-
-  toggleBtn.addEventListener("pointerdown", (e) => {
-    toggleBtn.setPointerCapture(e.pointerId);
-    onDragStart(e.clientX, e.clientY);
-  });
-  toggleBtn.addEventListener("pointermove", (e) => {
-    onDragMove(e.clientX, e.clientY);
-  });
-  toggleBtn.addEventListener("pointerup", onDragEnd);
-  toggleBtn.addEventListener("pointercancel", onDragEnd);
-
-  window.addEventListener("resize", () => moveToCorner(currentCorner, false));
-
-  toggleBtn.addEventListener("click", () => {
-    if (moved) {
-      moved = false;
-      return; // तानिसकेपछिको click ले panel नखोलोस्
-    }
-    const rect = toggleBtn.getBoundingClientRect();
-    positionPanelNearButton(rect.left, rect.top, currentCorner);
+  navBtn.addEventListener("click", () => {
+    positionPanelAboveNav();
     panel.classList.toggle("open");
+    document.querySelectorAll(".nav-item").forEach((n) => n.classList.remove("active"));
+    if (panel.classList.contains("open")) navBtn.classList.add("active");
   });
 
-  panel.querySelector("#chat-close").addEventListener("click", () =>
-    panel.classList.remove("open")
-  );
+  panel.querySelector("#chat-close").addEventListener("click", () => {
+    panel.classList.remove("open");
+    navBtn.classList.remove("active");
+  });
+
+  window.addEventListener("resize", () => {
+    if (panel.classList.contains("open")) positionPanelAboveNav();
+  });
 
   const messagesEl = panel.querySelector("#chat-messages");
   const inputEl = panel.querySelector("#chat-input");
