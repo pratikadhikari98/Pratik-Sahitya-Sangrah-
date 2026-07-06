@@ -1,6 +1,6 @@
 // ===== AI CHAT WIDGET (सिधै browser बाट Gemini API, backend बिना) =====
 // यहाँ आफ्नो Google AI Studio API key राख्नुहोस्
-const GEMINI_API_KEY = "YOUR_GOOGLE_API_KEY_HERE";
+const GEMINI_API_KEY = "AQ.Ab8RN6Ii1ySPlAv1qBPvyz6wi3QObFoa_e-LCjbD75wXuZlXkQ";
 const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
