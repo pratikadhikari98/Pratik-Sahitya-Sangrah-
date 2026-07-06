@@ -1,10 +1,7 @@
-// ===== AI CHAT WIDGET (सिधै browser बाट Gemini API, backend बिना) =====
-// यहाँ आफ्नो Google AI Studio API key राख्नुहोस्
-const GEMINI_API_KEY = "AIzaSyCjDZkZ_gqf6AsznBb1O8YcKQ6rVv1ARI8";
-const GEMINI_MODEL = "gemini-2.5-flash";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
+// ===== AI CHAT WIDGET (Cloudflare Worker मार्फत, API key यहाँ छैन) =====
+// API key यहाँ छैन — Cloudflare Worker मा secret को रूपमा राखिएको छ
+const WORKER_URL = "https://purple-dust-f97e.amababa055.workers.dev/";
 
-const MAX_POEMS_PER_REQUEST = 2;
 const MAX_HISTORY_MESSAGES = 10;
 
 // यो page मा data/kavita.js बाट आउने वैश्विक KAVITA_DATA प्रयोग गरिन्छ
@@ -19,32 +16,11 @@ function buildPoemsIndex(poems) {
     .join("\n");
 }
 
-function findRelevantPoems(query, poems, limit = MAX_POEMS_PER_REQUEST) {
-  const words = Array.from(
-    new Set((query.toLowerCase().match(/[\w\u0900-\u097F]+/g) || []))
-  ).filter((w) => w.length > 1);
-  if (!words.length) return [];
-
-  const scored = poems
-    .map((p) => {
-      const haystack = [
-        p.title || "",
-        (p.tags || []).join(" "),
-        p.content || "",
-      ]
-        .join(" ")
-        .toLowerCase();
-      const score = words.reduce((acc, w) => acc + (haystack.includes(w) ? 1 : 0), 0);
-      return { score, poem: p };
-    })
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score);
-
-  return scored.slice(0, limit).map((x) => x.poem);
-}
-
+// कविता संग्रह सानो भएकाले (हाल १५ भन्दा कम) हरेक प्रश्नमा सबै कविताको
+// पूरा content नै पठाइन्छ — यसले AI लाई पूर्ण access दिन्छ र कुनै प्रश्नमा
+// keyword नमिलेर सही जवाफ नआउने समस्या हटाउँछ।
 function buildPoetryBlock(poems) {
-  if (!poems.length) return "(यो प्रश्नसँग सिधै मिल्ने कविता भेटिएन।)";
+  if (!poems.length) return "(हाल कुनै कविता उपलब्ध छैन)";
   return poems
     .map(
       (p) =>
@@ -56,32 +32,46 @@ function buildPoetryBlock(poems) {
 
 const BASE_PROMPT = `तपाईंको नाम 'प्रतीक AI' हो। तपाईं 'Pratik Sahitya Sangrah' नामक नेपाली साहित्य/कविता संग्रह वेबसाइटको सहायक हुनुहुन्छ। तपाईंलाई प्रतीक अधिकारीले बनाउनुभएको हो।
 
-प्रतीक अधिकारीको बारेमा (कसैले 'प्रतीक अधिकारी को हो' भनेर सोधे यही जानकारीको आधारमा संक्षेपमा जवाफ दिनुहोस्):
-- उहाँ 'श्री सरस्वती संस्कृत विद्यापीठ' बाट शास्त्री (संस्कृत अध्ययन), हाल दोस्रो वर्षमा अध्ययनरत विद्यार्थी हुनुहुन्छ, र नव्य व्याकरण तथा अंग्रेजी साहित्यमा पनि अध्ययन गर्नुभएको छ।
-- पाणिनीय व्याकरण (अष्टाध्यायी र यसका भाष्य/टीका) तथा नव्य न्याय दर्शनमा विशेषज्ञता राख्नुहुन्छ। वैदिक ग्रन्थ र निरुक्तमा पनि अनुसन्धान गर्नुहुन्छ।
-- हाल 'श्री दुर्गा वैदिक संस्कृत विद्याश्रम', तिलोत्तमा-१ नयाँमिल, रुपन्देहीमा शिक्षकको रूपमा कार्यरत हुनुहुन्छ।
-- ग्राफिक डिजाइन, डिजिटल कन्टेन्ट निर्माण, र संगीतमा पनि रुचि राख्नुहुन्छ।
-- नेपाली (मातृभाषा), संस्कृत (दक्ष), हिन्दी र अंग्रेजी (functional) भाषा बोल्नुहुन्छ। पोखरा, नेपालमा बस्नुहुन्छ।
-यो जानकारी प्रत्यक्ष रूपमा सोधिएमा मात्र दिनुहोस्, अरू सामान्य कुराकानीमा आफैं नल्याउनुहोस्।
+प्रतीक अधिकारीको बारेमा (कसैले 'प्रतीक अधिकारी को हो' भनेर सोधे यही जानकारीको आधारमा संक्षेपमा जवाफ दिनुहोस्, पूरै एकैचोटि नबकाई प्रश्न अनुसार सान्दर्भिक अंश मात्र दिनुहोस्):
+
+शिक्षा:
+- शास्त्री (Bachelor of Sanskrit), विशेषज्ञता: पाणिनीय व्याकरण र वैदिक साहित्य, हाल दोस्रो वर्षमा अध्ययनरत, पोखरा।
+
+पेशा:
+- संस्कृत शिक्षक, श्री दुर्गा वैदिक संस्कृत विद्याश्रम, पोखरा (हाल कार्यरत) — पाणिनीय सूत्र र तिनका व्यावहारिक भाषिक प्रयोग सिकाउने, वैदिक पाठ स्मरण/उच्चारण र शास्त्रीय ग्रन्थ व्याख्यामा विद्यार्थी मार्गदर्शन, परम्परागत व्याकरण विश्लेषण र वैदिक टीकामाथि अनुसन्धानमूलक सत्र सञ्चालन।
+
+अनुसन्धान र अध्ययन क्षेत्र:
+- पाणिनीय व्याकरण — अष्टाध्यायी सूत्र प्रणालीको गहन अध्ययन
+- संस्कृत व्याकरणिक संरचना र सूत्र-व्युत्पत्तिको भाषिक/रूपिम विश्लेषण
+- वैदिक र शास्त्रीय संस्कृतको तुलनात्मक अध्ययन (पाणिनीय ढाँचामार्फत)
+- भारतीय दर्शन शास्त्रहरूको ज्ञानमीमांसीय अध्ययन
+- संस्कृत काव्यशास्त्र, रस सिद्धान्त, र शास्त्रीय साहित्य परम्परा
+
+सीप र रुचि:
+- ग्राफिक डिजाइन, डिजिटल कन्टेन्ट निर्माण, आलोचनात्मक/विश्लेषणात्मक चिन्तन, संगीत र सांस्कृतिक कला
+
+भाषा:
+- नेपाली (मातृभाषा), संस्कृत (दक्ष), हिन्दी (आधारभूत), अंग्रेजी (आधारभूत), मैथिली (सामान्य कुराकानी)
+
+यो जानकारी प्रत्यक्ष रूपमा सोधिएमा मात्र दिनुहोस्, अरू सामान्य कुराकानीमा आफैं नल्याउनुहोस्। कसैले इमेल सोधे मात्र यो दिनुहोस्: apratik055@gmail.com। फोन नम्बर कसैले सोधे पनि नदिनुहोस् — भन्नुहोस् कि फोन नम्बर यहाँ उपलब्ध छैन।
 
 महत्वपूर्ण: तपाईं को हो/कसले बनायो भन्ने प्रश्न प्रत्यक्ष सोधिएमा मात्र भन्नुहोस् — 'म प्रतीक अधिकारीद्वारा बनाइएको AI हुँ।' अरू कुराकानीमा नदोहोर्याउनुहोस्। कहिल्यै आफूलाई Gemini/Google/अन्य कम्पनीको AI नभन्नुहोस्।
 
 नेपाली भाषामा मैत्रीपूर्ण र संक्षिप्त जवाफ दिनुहोस्। अंग्रेजीमा सोधे अंग्रेजीमा जवाफ दिनुहोस्।`;
 
-function buildSystemInstruction(userMessage) {
+function buildSystemInstruction() {
   const poems = getPoems();
-  const relevant = findRelevantPoems(userMessage, poems);
   const poemsIndex = buildPoemsIndex(poems);
-  const poetryBlock = buildPoetryBlock(relevant);
+  const poetryBlock = buildPoetryBlock(poems);
 
   return (
     `${BASE_PROMPT}\n\n` +
     `साइटमा भएका सबै कविताको शीर्षक/ट्याग सूची:\n${poemsIndex}\n\n` +
-    "प्रयोगकर्ताको सोधाइसँग मिल्ने कविताको पूरा text तल दिइएको छ (भेटिएको भए)। " +
+    "तलको section मा साइटमा भएका सबै कविताको पूरा text दिइएको छ। " +
     "कविता सुझाव माग्दा, व्याख्या गर्न भन्दा, वा उत्कृष्ट हरफ माग्दा, यही " +
     "वास्तविक डाटाबाट मात्र जवाफ दिनुहोस् — आफैं नयाँ हरफ नबनाउनुहोस्। " +
     "जवाफमा कविताको शीर्षक पनि भन्नुहोस्।\n\n" +
-    `===== मिल्दो कविता(हरू) =====\n${poetryBlock}\n===== समाप्त =====`
+    `===== सबै कविता =====\n${poetryBlock}\n===== समाप्त =====`
   );
 }
 
@@ -158,14 +148,14 @@ function buildChatWidget() {
     sendBtn.disabled = true;
 
     try {
-      const systemInstruction = buildSystemInstruction(text);
+      const systemInstruction = buildSystemInstruction();
 
       const contents = [
         ...chatHistory,
         { role: "user", parts: [{ text }] },
       ];
 
-      const res = await fetch(GEMINI_URL, {
+      const res = await fetch(WORKER_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,12 +166,11 @@ function buildChatWidget() {
         }),
       });
 
-      if (!res.ok) {
-        const errBody = await res.text();
-        throw new Error(`Gemini error ${res.status}: ${errBody}`);
-      }
-
       const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(`Gemini error ${res.status}: ${JSON.stringify(data.error || data)}`);
+      }
       const replyText =
         data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ||
         "माफ गर्नुहोस्, जवाफ आएन।";
