@@ -2,7 +2,7 @@
 // प्रतीक साहित्य संग्रह — Service Worker (PWA)
 // ================================================
 
-const CACHE_NAME = 'pratik-sahitya-v3';
+const CACHE_NAME = 'pratik-sahitya-v4';
 const CACHE_URLS = [
   './',
   './index.html',
