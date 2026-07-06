@@ -702,7 +702,9 @@ input:checked + .slider::before { transform: translateX(18px); }
 [data-theme="dark"] .nav-item.active { color: var(--accent2); }
 .nav-icon { font-size: 28px; }
 .nav-label { display: none; }
-#chat-nav-icon svg { width: 28px; height: 28px; }
+#chat-nav-icon { display: flex; align-items: center; justify-content: center; }
+#chat-nav-icon svg { width: 30px; height: 30px; color: var(--tab-text); }
+.nav-item.active #chat-nav-icon svg { color: var(--accent2); }
 
 /* ===== TOAST ===== */
 .toast {
