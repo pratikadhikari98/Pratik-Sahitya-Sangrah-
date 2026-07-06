@@ -15,7 +15,7 @@ function buildChatWidget() {
   panel.id = "chat-panel";
   panel.innerHTML = `
     <div id="chat-header">
-      <span>AI सहायक</span>
+      <span>प्रतीक AI</span>
       <button id="chat-close" aria-label="बन्द गर्नुहोस्">✕</button>
     </div>
     <div id="chat-messages"></div>
@@ -106,7 +106,7 @@ function buildChatWidget() {
     if (e.key === "Enter") sendMessage();
   });
 
-  addMessage("नमस्ते! म तपाईंको साहित्य संग्रहको AI सहायक हुँ। सोध्नुहोस्।", "bot");
+  addMessage("नमस्ते! म प्रतीक AI हुँ, तपाईंको साहित्य संग्रहको सहायक। सोध्नुहोस्।", "bot");
 }
 
 window.addEventListener("load", buildChatWidget);
