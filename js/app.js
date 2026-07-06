@@ -451,33 +451,6 @@ function showRandomPoem() {
   openPoem(KAVITA_DATA[idx].id);
 }
 
-// ===== NAV PILL (bottom nav को चल्ने capsule) =====
-function moveNavPill(targetBtn) {
-  const pill = document.getElementById('navPill');
-  const nav = document.querySelector('.bottom-nav');
-  if (!pill || !nav || !targetBtn) return;
-  const navRect = nav.getBoundingClientRect();
-  const btnRect = targetBtn.getBoundingClientRect();
-  pill.style.width = btnRect.width - 10 + 'px';
-  pill.style.transform = `translateX(${btnRect.left - navRect.left + 5}px)`;
-}
-
-function initNavPill() {
-  const activeBtn = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
-  moveNavPill(activeBtn);
-
-  document.querySelectorAll('.nav-item').forEach(btn => {
-    btn.addEventListener('click', () => moveNavPill(btn));
-  });
-
-  window.addEventListener('resize', () => {
-    const current = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
-    moveNavPill(current);
-  });
-}
-
-window.addEventListener('load', () => setTimeout(initNavPill, 50));
-
 // ===== SECTION NAV =====
 function showSection(section) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
