@@ -137,6 +137,98 @@ function buildChatWidget() {
     div.innerText = text;
     messagesEl.appendChild(div);
     messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const div = document.createElement("div");
+    div.className = "chat-msg bot chat-typing";
+    div.id = "chat-typing-indicator";
+    div.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span>`;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function removeTyping() {
+    const el = document.getElementById("chat-typing-indicator");
+    if (el) el.remove();
+  }
+
+  // ===== FALLBACK (API quota सकिँदा वा network/error हुँदा प्रयोग हुने local जवाफ) =====
+  const BIO_FALLBACK =
+    "प्रतीक अधिकारी शास्त्री (संस्कृत) को विद्यार्थी हुनुहुन्छ, विशेषज्ञता पाणिनीय व्याकरण र वैदिक साहित्यमा। " +
+    "हाल श्री दुर्गा वैदिक संस्कृत विद्याश्रम, पोखरामा संस्कृत शिक्षकको रूपमा कार्यरत हुनुहुन्छ। " +
+    "उहाँको रुचि ग्राफिक डिजाइन, डिजिटल कन्टेन्ट निर्माण र संगीतमा पनि छ।";
+
+  const GREETING_WORDS = ["नमस्ते", "नमस्कार", "hi", "hello", "hey", "namaste"];
+  const BIO_WORDS = ["को हो", "प्रतीक", "who are you", "बारेमा", "परिचय"];
+  const EMAIL_WORDS = ["इमेल", "email", "ईमेल", "मेल"];
+  const PHONE_WORDS = ["फोन", "phone", "नम्बर", "सम्पर्क"];
+
+  function containsAny(text, words) {
+    const t = text.toLowerCase();
+    return words.some((w) => t.includes(w.toLowerCase()));
+  }
+
+  // कविता डाटाबाट keyword मिलेर सबैभन्दा उत्तम मिल्ने कविता खोज्ने (quota सकिँदा प्रयोग हुने)
+  function localPoemSearch(query) {
+    const poems = getPoems();
+    const words = Array.from(
+      new Set((query.toLowerCase().match(/[\w\u0900-\u097F]+/g) || []))
+    ).filter((w) => w.length > 1);
+    if (!words.length || !poems.length) return null;
+
+    const scored = poems
+      .map((p) => {
+        const haystack = [p.title || "", (p.tags || []).join(" "), p.content || ""]
+          .join(" ")
+          .toLowerCase();
+        const score = words.reduce((acc, w) => acc + (haystack.includes(w) ? 1 : 0), 0);
+        return { score, poem: p };
+      })
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    return scored.length ? scored[0].poem : null;
+  }
+
+  function localFallbackReply(userText) {
+    if (containsAny(userText, GREETING_WORDS)) {
+      return "नमस्ते! म प्रतीक AI हुँ। अहिले पूर्ण क्षमतामा जवाफ दिन गाह्रो भए पनि, म साइटमा भएको जानकारीबाट सकेसम्म मद्दत गर्छु — के सोध्नुहुन्छ?";
+    }
+    if (containsAny(userText, EMAIL_WORDS)) {
+      return "प्रतीक अधिकारीको इमेल: apratik055@gmail.com";
+    }
+    if (containsAny(userText, PHONE_WORDS)) {
+      return "माफ गर्नुहोस्, फोन नम्बर यहाँ उपलब्ध छैन।";
+    }
+    if (containsAny(userText, BIO_WORDS)) {
+      return BIO_FALLBACK;
+    }
+
+    const poem = localPoemSearch(userText);
+    if (poem) {
+      return `यो कविता तपाईंलाई मन पर्न सक्छ — "${(poem.title || "").trim()}":\n\n${(poem.content || "").trim()}`;
+    }
+
+    return (
+      "माफ गर्नुहोस्, अहिले म राम्रोसँग बुझ्न सकिनँ। कृपया कविताको नाम, ट्याग, वा " +
+      "प्रतीक अधिकारीको बारेमा सोझो प्रश्न सोध्नुहोस्, म साइटको जानकारीबाट जवाफ दिने प्रयास गर्छु।"
+    );
+  }
+
+  function isQuotaOrUnavailableError(status, data) {
+    const msg = JSON.stringify(data || "").toLowerCase();
+    return (
+      status === 429 ||
+      status === 503 ||
+      status === 0 ||
+      msg.includes("quota") ||
+      msg.includes("resource_exhausted") ||
+      msg.includes("rate limit") ||
+      msg.includes("leaked") ||
+      msg.includes("permission_denied")
+    );
   }
 
   async function sendMessage() {
@@ -146,6 +238,9 @@ function buildChatWidget() {
     addMessage(text, "user");
     inputEl.value = "";
     sendBtn.disabled = true;
+    showTyping();
+
+    let usedFallback = false;
 
     try {
       const systemInstruction = buildSystemInstruction();
@@ -166,23 +261,33 @@ function buildChatWidget() {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok || data.error) {
-        throw new Error(`Gemini error ${res.status}: ${JSON.stringify(data.error || data)}`);
+        if (isQuotaOrUnavailableError(res.status, data)) {
+          usedFallback = true;
+          removeTyping();
+          addMessage(localFallbackReply(text), "bot");
+        } else {
+          throw new Error(`Gemini error ${res.status}: ${JSON.stringify(data.error || data)}`);
+        }
+      } else {
+        const replyText =
+          data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ||
+          "माफ गर्नुहोस्, जवाफ आएन।";
+
+        removeTyping();
+        addMessage(replyText, "bot");
+
+        chatHistory.push({ role: "user", parts: [{ text }] });
+        chatHistory.push({ role: "model", parts: [{ text: replyText }] });
+        chatHistory = chatHistory.slice(-MAX_HISTORY_MESSAGES);
       }
-      const replyText =
-        data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ||
-        "माफ गर्नुहोस्, जवाफ आएन।";
-
-      addMessage(replyText, "bot");
-
-      chatHistory.push({ role: "user", parts: [{ text }] });
-      chatHistory.push({ role: "model", parts: [{ text: replyText }] });
-      chatHistory = chatHistory.slice(-MAX_HISTORY_MESSAGES);
     } catch (err) {
-      addMessage("त्रुटि: " + err.message, "bot");
-      console.error("[chat-widget]", err);
+      // network error वा अन्य नमिल्ने अवस्थामा पनि local जवाफ नै दिने, कच्चा error होइन
+      removeTyping();
+      addMessage(localFallbackReply(text), "bot");
+      console.error("[chat-widget] falling back locally:", err);
     } finally {
       sendBtn.disabled = false;
       inputEl.focus();
@@ -197,4 +302,8 @@ function buildChatWidget() {
   addMessage("नमस्ते! म प्रतीक AI हुँ, तपाईंको साहित्य संग्रहको सहायक। सोध्नुहोस्।", "bot");
 }
 
-window.addEventListener("load", buildChatWidget);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", buildChatWidget);
+} else {
+  buildChatWidget();
+}
