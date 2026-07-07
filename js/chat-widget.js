@@ -256,7 +256,7 @@ function buildChatWidget() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction }] },
+          systemInstruction: { parts: [{ text: systemInstruction }] },
           contents,
         }),
       });
