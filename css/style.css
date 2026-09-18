@@ -480,6 +480,10 @@ input:checked + .slider::before { transform: translateX(18px); }
   font-size: 40px;
 }
 .card-scroll .card-cover { height: 100px; }
+.book3d { width: 100%; height: 100%; }
+.book-face { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.book-pages { display: none; }
+.card-bookmark-badge { display: none; }
 .card-body { padding: 10px; }
 .card-category {
   font-size: 10px;
@@ -673,19 +677,27 @@ input:checked + .slider::before { transform: translateX(18px); }
 /* ===== BOTTOM NAV ===== */
 .bottom-nav {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
   background: var(--nav-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-top: 1px solid var(--nav-border);
+  border: 1px solid var(--nav-border);
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  padding: 12px 0;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  gap: 26px;
+  padding: 12px 26px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease;
+}
+.bottom-nav.nav-hidden {
+  transform: translateX(-50%) translateY(calc(100% + 24px));
 }
 .nav-item {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1010,6 +1022,104 @@ input:checked + .slider::before { transform: translateX(18px); }
   padding: 5px;
   font-size: 10px;
 }
+
+/* --- Book-shelf layout (default grid): closed hardcover books with a spine crease --- */
+[data-layout="grid"] .cards-grid {
+  gap: 26px 30px;
+  padding-right: 4px;
+}
+[data-layout="grid"] .cards-grid .card {
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+[data-layout="grid"] .cards-grid .card-read-btn {
+  display: none;
+}
+[data-layout="grid"] .cards-grid .card-body {
+  padding: 8px 2px 0;
+}
+[data-layout="grid"] .cards-grid .card-cover {
+  height: 190px;
+  background: transparent;
+}
+[data-layout="grid"] .cards-grid .book3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.28)) drop-shadow(7px 11px 11px rgba(0,0,0,0.22));
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+[data-layout="grid"] .cards-grid .card:hover .book3d {
+  transform: translateY(-5px);
+  filter: drop-shadow(4px 7px 6px rgba(0,0,0,0.32)) drop-shadow(10px 16px 15px rgba(0,0,0,0.26));
+}
+[data-layout="grid"] .cards-grid .book-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  font-size: 40px;
+}
+/* bent/creased hardcover shading on BOTH edges — alternating light/dark bands */
+[data-layout="grid"] .cards-grid .book-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right,
+      rgba(0,0,0,0.8) 0%,
+      rgba(0,0,0,0.45) 3.5%,
+      rgba(255,255,255,0.38) 6%,
+      rgba(0,0,0,0.35) 9%,
+      rgba(255,255,255,0.16) 12%,
+      rgba(0,0,0,0.12) 15%,
+      rgba(0,0,0,0) 20%),
+    linear-gradient(to left,
+      rgba(0,0,0,0.8) 0%,
+      rgba(0,0,0,0.45) 3.5%,
+      rgba(255,255,255,0.38) 6%,
+      rgba(0,0,0,0.35) 9%,
+      rgba(255,255,255,0.16) 12%,
+      rgba(0,0,0,0.12) 15%,
+      rgba(0,0,0,0) 20%);
+  pointer-events: none;
+  z-index: 2;
+}
+/* soft overall gloss */
+[data-layout="grid"] .cards-grid .book-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 30%);
+  pointer-events: none;
+  z-index: 2;
+}
+[data-layout="grid"] .cards-grid .book-pages {
+  display: none;
+}
+[data-layout="grid"] .cards-grid .card-bookmark-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(2px);
+  font-size: 13px;
+  z-index: 3;
+}
+[data-layout="grid"] .cards-grid .card-bookmark-badge.saved { background: rgba(0,0,0,0.5); }
+[data-htheme="kalika"][data-layout="grid"] .cards-grid .card { border: none; }
+[data-htheme="kalika"][data-layout="grid"] .cards-grid .card:hover { box-shadow: none !important; }
+
 
 .picker-label {
   padding: 8px 14px 4px;
