@@ -59,7 +59,7 @@
     </button>
     <button class="icon-btn" id="themeBtn" title="Toggle Theme">🌙</button>
     <button class="icon-btn" id="menuBtn" title="Menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </header>
@@ -76,6 +76,7 @@
 
 <!-- 3-dots Dropdown Menu -->
 <div class="dropdown-menu" id="dropdownMenu">
+  <a href="about.html">👤 <span data-en="About" data-ne="बारेमा">बारेमा</span></a>
   <a href="#" onclick="showRandomPoem()">🎲 <span data-en="Random Poem" data-ne="अनियमित कविता">अनियमित कविता</span></a>
   <a href="#" onclick="showBookmarks()">🔖 <span data-en="Bookmarks" data-ne="सेभ गरिएका">सेभ गरिएका</span></a>
   <a href="#" onclick="window.print()">🖨️ <span data-en="Print" data-ne="प्रिन्ट">प्रिन्ट</span></a>
@@ -144,17 +145,6 @@
 <div class="tag-filter-wrap" id="tagFilterWrap">
   <!-- Tags inserted by JS -->
 </div>
-
-<!-- POPULAR SECTION -->
-<section class="content-section">
-  <div class="section-header">
-    <h2 class="section-title" data-en="Popular Works" data-ne="लोकप्रिय रचनाहरू">लोकप्रिय रचनाहरू</h2>
-    <button class="random-btn" onclick="showRandomPoem()">🎲 <span data-en="Random" data-ne="अनियमित">अनियमित</span></button>
-  </div>
-  <div class="cards-scroll" id="popularCards">
-    <!-- Cards inserted by JS -->
-  </div>
-</section>
 
 <!-- ALL WORKS SECTION -->
 <section class="content-section">
