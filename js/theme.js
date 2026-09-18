@@ -2,6 +2,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ── Layout is always Grid now; clear any old saved preference ──
+  document.documentElement.setAttribute('data-layout', 'grid');
+  localStorage.removeItem('layout');
+
   // ── Day / Night ──
   const nightBtn = document.getElementById('themeBtn');
   const savedNight = localStorage.getItem('theme') || 'light';
@@ -22,16 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ── Layout ──
-  const savedLayout = localStorage.getItem('layout') || 'grid';
-  applyLayout(savedLayout);
-  document.querySelectorAll('.layout-swatch').forEach(btn => {
-    btn.addEventListener('click', () => {
-      applyLayout(btn.dataset.layout);
-      localStorage.setItem('layout', btn.dataset.layout);
-    });
-  });
-
 });
 
 function applyNight(theme) {
@@ -43,12 +37,5 @@ function applyHTheme(htheme) {
   document.documentElement.setAttribute('data-htheme', htheme);
   document.querySelectorAll('.theme-swatch').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.htheme === htheme)
-  );
-}
-
-function applyLayout(layout) {
-  document.documentElement.setAttribute('data-layout', layout);
-  document.querySelectorAll('.layout-swatch').forEach(btn =>
-    btn.classList.toggle('active', btn.dataset.layout === layout)
   );
 }
