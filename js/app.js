@@ -106,7 +106,34 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBlackboard();
   startBlackboardAuto();
   setupBlackboardSwipe();
+  setupNavAutoHide();
 });
+
+// ===== BOTTOM NAV: hide on scroll down, show on scroll up =====
+function setupNavAutoHide() {
+  const nav = document.querySelector('.bottom-nav');
+  if (!nav) return;
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
+      const scrolledDown = currentScrollY > lastScrollY;
+      const pastThreshold = currentScrollY > 40;
+
+      if (scrolledDown && pastThreshold) {
+        nav.classList.add('nav-hidden');
+      } else {
+        nav.classList.remove('nav-hidden');
+      }
+      lastScrollY = currentScrollY;
+      ticking = false;
+    });
+  }, { passive: true });
+}
 
 // ===== BACK BUTTON / SWIPE — close modal instead of exiting app =====
 window.addEventListener('popstate', () => {
@@ -145,7 +172,7 @@ function renderHero() {
       </div>
       <div class="hero-slide-cover">
         ${p.cover
-          ? `<img src="${p.cover}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.coverEmoji || '📖'}'}))" />`
+          ? `<img src="${p.cover}" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.coverEmoji || '📖'}'}))" />`
           : p.coverEmoji}
       </div>
     </div>
@@ -336,9 +363,6 @@ function renderCards() {
     data = data.filter(p => p.tags.includes(currentTag));
   }
 
-  const popular = [...KAVITA_DATA].sort(() => Math.random() - 0.5);
-  document.getElementById('popularCards').innerHTML = popular.map(p => createCard(p, true)).join('');
-
   const allContainer = document.getElementById('allCards');
   allContainer.innerHTML = data.length === 0
     ? `<div class="empty-state" style="grid-column:1/-1">
@@ -353,9 +377,15 @@ function createCard(poem, isScroll) {
   return `
     <div class="card ${isScroll ? 'card-scroll' : ''}" onclick="openPoem('${poem.id}')">
       <div class="card-cover">
-        ${poem.cover
-          ? `<img src="${poem.cover}" style="width:100%;height:100%;object-fit:cover;" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
-          : poem.coverEmoji}
+        <div class="book3d">
+          <div class="book-pages"></div>
+          <div class="book-face">
+            ${poem.cover
+              ? `<img src="${poem.cover}" style="display:block;width:100%;height:100%;object-fit:cover;" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
+              : `<span class="book-face-emoji">${poem.coverEmoji || '📖'}</span>`}
+          </div>
+        </div>
+        <span class="card-bookmark-badge ${saved ? 'saved' : ''}">${saved ? '🔖' : '🏷️'}</span>
       </div>
       <div class="card-body">
         <div class="card-category">${getCategoryLabel(poem.category)}</div>
@@ -399,7 +429,7 @@ function openPoem(id) {
   document.getElementById('modalBody').innerHTML = `
     <div class="poem-cover-large">
       ${poem.cover
-        ? `<img src="${poem.cover}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
+        ? `<img src="${poem.cover}" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:16px;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
         : poem.coverEmoji}
     </div>
     <h1 class="poem-title-large">${poem.title}</h1>
