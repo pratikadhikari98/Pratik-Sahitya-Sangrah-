@@ -2,7 +2,7 @@
 // प्रतीक साहित्य संग्रह — Service Worker (PWA)
 // ================================================
 
-const CACHE_NAME = 'pratik-sahitya-v4';
+const CACHE_NAME = 'pratik-sahitya-v5';
 const CACHE_URLS = [
   './',
   './index.html',
@@ -18,14 +18,11 @@ const CACHE_URLS = [
   './js/share.js',
   './js/about.js',
   './js/chat-widget.js',
-  './data/kavita.js',
+  './data/kavita-loader.js',
   './data/about.js',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
-  './covers/1776176711764.png',
-  './covers/1776177925119.png',
-  './covers/k007.png',
-  './covers/khusi.png'
+  './covers/khusi.jpg'
 ];
 
 // ── Install: cache सबै files ──────────────────────
