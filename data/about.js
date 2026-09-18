@@ -3,16 +3,18 @@
 // ============================================================
 
 const ABOUT_DATA = {
-  name: "",
-  subtitle: "",
-  location: "",
+  name: "प्रतीक अधिकारी",
+  subtitle: "शास्त्री विद्यार्थी — पाणिनीय व्याकरण",
+  location: "पोखरा, गोर्जे",
   photo: "covers/about-photo.jpg",   // ← आफ्नो photo यहाँ राख्नुस्
   photoEmoji: "✍️",                  // photo नभए यो देखिन्छ
 
   quote: "",
   quoteAuthor: "",
 
-  bio: ``,
+  bio: `शास्त्री (संस्कृत) को विद्यार्थी, विशेषज्ञता पाणिनीय व्याकरण र वैदिक साहित्यमा। घर पोखरा, गोर्जे।
+श्री दुर्गा वैदिक संस्कृत विद्याश्रम, पोखरामा करिब १.६ वर्ष संस्कृत शिक्षकको रूपमा अध्यापन गराएँ।
+हाल यो डिजिटल साहित्य संग्रह र अन्य वेबसाइटहरू बनाउने काममा सक्रिय छु।`,
 
   milestones: [
     { year: "२०२०", text: "पहिलो कविता लेखेँ" },
@@ -22,10 +24,16 @@ const ABOUT_DATA = {
   ],
 
   contact: {
-    facebook: "https://www.facebook.com/share/14dmDgQM7T7/",    // ← आफ्नो Facebook link राख्नुस्
-    youtube: "https://youtube.com/",      // ← आफ्नो YouTube link राख्नुस्
-    email: "apratik055@gmail.com"               // ← आफ्नो Gmail address राख्नुस्
-  }
+    name: "प्रतीक अधिकारी",
+    phone: "9769312708",                                          // ← फोन नम्बर
+    email: "apratik055@gmail.com",                                 // ← आफ्नो Gmail address राख्नुस्
+    facebook: "https://www.facebook.com/share/19Tw22BYvo/",        // ← आफ्नो Facebook link राख्नुस्
+    youtube: ""                                                    // ← आफ्नो YouTube link राख्नुस्
+  },
+
+  otherWebsites: [
+    // पछि यहाँ थपिनेछ: { name: "...", url: "..." }
+  ]
 };
 
 // ============================================================
