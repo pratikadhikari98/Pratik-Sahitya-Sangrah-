@@ -276,6 +276,73 @@
 }
 .about-photo-desc:empty { display: none; }
 
+/* QUICK INFO — 3 लाइन: नाम / फोन / इमेल */
+.about-quick-info {
+  margin: 14px 16px 0;
+  padding: 16px 20px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow);
+  border-left: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.about-quick-info:empty { display: none; }
+.about-quick-info .qi-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+}
+.about-quick-info .qi-icon {
+  width: 22px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 16px;
+}
+.about-quick-info .qi-label {
+  color: var(--text2);
+  font-size: 11px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+.about-quick-info .qi-value {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* OTHER WEBSITES */
+.about-sites {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.about-site-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.about-site-link:hover { border-color: var(--accent); background: var(--bg3); transform: translateY(-2px); }
+.about-sites-empty {
+  font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 14px;
+  color: var(--text2);
+  padding: 4px 2px;
+}
+
 /* ===== ROTATING WHEEL SECTION ===== */
 .wheel-section {
   background: var(--bg2);
