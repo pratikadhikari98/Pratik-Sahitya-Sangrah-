@@ -1154,6 +1154,10 @@ input:checked + .slider::before { transform: translateX(18px); }
 [data-layout="grid"] .cards-grid .card-bookmark-badge.saved { background: rgba(0,0,0,0.5); }
 [data-htheme="kalika"][data-layout="grid"] .cards-grid .card { border: none; }
 [data-htheme="kalika"][data-layout="grid"] .cards-grid .card:hover { box-shadow: none !important; }
+[data-htheme="kalika"][data-layout="grid"] .cards-grid .card-cover {
+  background: transparent !important;
+  animation: none !important;
+}
 
 
 .picker-label {
