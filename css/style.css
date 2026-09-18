@@ -467,7 +467,9 @@ input:checked + .slider::before { transform: translateX(18px); }
   position: relative;
   animation: fadeUp 0.4s ease both;
 }
-.card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.16); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.16); }
+}
 .card-scroll { min-width: 140px; max-width: 140px; }
 .card-cover {
   width: 100%;
@@ -486,31 +488,46 @@ input:checked + .slider::before { transform: translateX(18px); }
 .card-bookmark-badge { display: none; }
 .card-body { padding: 10px; }
 .card-category {
+  display: inline-block;
   font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: var(--accent);
-  font-family: 'DM Sans', sans-serif;
-  margin-bottom: 3px;
+  background: var(--tag-bg);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-family: 'Akshar', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 .card-title {
-  font-family: 'Tiro Devanagari Hindi', serif;
-  font-size: 14px;
-  line-height: 1.3;
+  font-family: 'Akshar', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.35;
   color: var(--text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  letter-spacing: 0.1px;
 }
 .card-scroll .card-title { font-size: 13px; }
 .card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
 }
-.card-read-time { font-size: 10px; color: var(--text2); font-family: 'DM Sans', sans-serif; }
+.card-read-time {
+  font-size: 10px;
+  color: var(--text2);
+  font-family: 'Akshar', 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
 .card-bookmark {
   font-size: 14px;
   opacity: 0.5;
@@ -529,7 +546,9 @@ input:checked + .slider::before { transform: translateX(18px); }
   font-family: inherit;
   transition: background var(--transition);
 }
-.card-read-btn:hover { background: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .card-read-btn:hover { background: var(--accent); }
+}
 
 /* ===== MODAL ===== */
 .modal-overlay {
@@ -570,7 +589,7 @@ input:checked + .slider::before { transform: translateX(18px); }
 .modal-body { padding: 20px 16px; }
 .poem-cover-large {
   width: 100%;
-  max-height: 220px;
+  height: 220px;
   object-fit: cover;
   border-radius: var(--radius);
   background: linear-gradient(135deg, var(--accent2), var(--accent));
@@ -579,6 +598,7 @@ input:checked + .slider::before { transform: translateX(18px); }
   justify-content: center;
   font-size: 60px;
   margin-bottom: 20px;
+  overflow: hidden;
 }
 .poem-title-large {
   font-family: 'Akshar', 'Tiro Devanagari Hindi', serif;
@@ -904,16 +924,20 @@ input:checked + .slider::before { transform: translateX(18px); }
 [data-htheme="kalika"] .card {
   border: 1.5px solid #c5dcf0;
 }
-[data-htheme="kalika"] .card:hover {
-  box-shadow: 0 8px 24px rgba(30,90,168,.18) !important;
-  border-color: #1e5aa8;
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  [data-htheme="kalika"] .card:hover {
+    box-shadow: 0 8px 24px rgba(30,90,168,.18) !important;
+    border-color: #1e5aa8;
+    transform: translateY(-3px);
+  }
 }
 [data-htheme="kalika"] .card-read-btn {
   background: #1e5aa8 !important;
 }
-[data-htheme="kalika"] .card-read-btn:hover {
-  background: #1a3a6b !important;
+@media (hover: hover) and (pointer: fine) {
+  [data-htheme="kalika"] .card-read-btn:hover {
+    background: #1a3a6b !important;
+  }
 }
 [data-htheme="kalika"] .tab-btn.active,
 [data-htheme="kalika"] .tag-btn.active {
@@ -1049,11 +1073,22 @@ input:checked + .slider::before { transform: translateX(18px); }
   width: 100%;
   height: 100%;
   filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.28)) drop-shadow(7px 11px 11px rgba(0,0,0,0.22));
-  transition: transform 0.22s ease, filter 0.22s ease;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
-[data-layout="grid"] .cards-grid .card:hover .book3d {
-  transform: translateY(-5px);
-  filter: drop-shadow(4px 7px 6px rgba(0,0,0,0.32)) drop-shadow(10px 16px 15px rgba(0,0,0,0.26));
+@media (hover: hover) and (pointer: fine) {
+  [data-layout="grid"] .cards-grid .card:hover .book3d {
+    transform: translateY(-5px);
+    filter: drop-shadow(4px 7px 6px rgba(0,0,0,0.32)) drop-shadow(10px 16px 15px rgba(0,0,0,0.26));
+  }
+}
+/* Tactile "pressed" feedback on tap/click — works on touch and mouse alike */
+[data-layout="grid"] .cards-grid .card:active {
+  transform: none;
+}
+[data-layout="grid"] .cards-grid .card:active .book3d {
+  transform: scale(0.94);
+  filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.3)) drop-shadow(2px 3px 4px rgba(0,0,0,0.2));
+  transition: transform 0.08s ease, filter 0.08s ease;
 }
 [data-layout="grid"] .cards-grid .book-face {
   position: relative;
