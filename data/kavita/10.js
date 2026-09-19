@@ -4,7 +4,7 @@ KAVITA_DATA.push({
   title: "तिलोत्तमा",
   category: "kavita",
   tags: ["देशभक्ति", "महिमा", "नेपाल", "बन्धुत्व"],
-  cover: "",
+  cover: "covers/1789800730832.png",
   coverEmoji: "🏔️",
   date: "2025-03-05",
   readTime: "अनुष्टुप",
