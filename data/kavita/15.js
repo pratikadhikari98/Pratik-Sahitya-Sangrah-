@@ -3,7 +3,7 @@ KAVITA_DATA.push({
   title: "आमा",
   category: "kavita",
   tags: ["माया", "प्रेम", "ममता"],
-  cover: "covers/file_00000000b9f87206b99cd055ed185f24.png",
+  cover: "covers/2d16f8d5-f204-4d5b-b60c-5fa125879ed0.jpg",
   coverEmoji: "🏔️",
   date: "2024-12-01",
   readTime: "शार्दूविक्रीडितम्",
