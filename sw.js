@@ -2,7 +2,7 @@
 // प्रतीक साहित्य संग्रह — Service Worker (PWA)
 // ================================================
 
-const CACHE_NAME = 'pratik-sahitya-v5';
+const CACHE_NAME = 'pratik-sahitya-v7';
 const CACHE_URLS = [
   './',
   './index.html',
@@ -22,7 +22,10 @@ const CACHE_URLS = [
   './data/about.js',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
-  './covers/khusi.jpg'
+  './css/admin.css',
+  './js/admin.js',
+  './js/admin-zip.js',
+  './assets/book_edge_shading.webp'
 ];
 
 // ── Install: cache सबै files ──────────────────────
@@ -31,7 +34,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log('[SW] Caching app shell');
-      return cache.addAll(CACHE_URLS);
+      return Promise.all(CACHE_URLS.map(u => cache.add(u).catch(() => null)));
     }).then(() => self.skipWaiting())
   );
 });
@@ -59,6 +62,20 @@ self.addEventListener('fetch', event => {
   if (!event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
       fetch(event.request).catch(() => new Response(''))
+    );
+    return;
+  }
+
+  // data/poems.json (एडमिनले बदल्ने) — सधैं network पहिले, offline मा मात्र cache
+  if (new URL(event.request.url).pathname.endsWith('/data/poems.json')) {
+    event.respondWith(
+      fetch(event.request).then(res => {
+        if (res && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put('./data/poems.json', copy));
+        }
+        return res;
+      }).catch(() => caches.match('./data/poems.json').then(r => r || new Response('{}', { headers: { 'Content-Type': 'application/json' } })))
     );
     return;
   }
