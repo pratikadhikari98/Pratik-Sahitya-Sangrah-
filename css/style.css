@@ -483,7 +483,6 @@ input:checked + .slider::before { transform: translateX(18px); }
 }
 .card-scroll .card-cover { height: 100px; }
 .book3d { width: 100%; height: 100%; }
-.book-face { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .book-pages { display: none; }
 .card-bookmark-badge { display: none; }
 .card-body { padding: 10px; }
@@ -1047,10 +1046,10 @@ input:checked + .slider::before { transform: translateX(18px); }
   font-size: 10px;
 }
 
-/* --- Book-shelf layout (default grid): closed hardcover books with a spine crease --- */
+/* --- Book-shelf layout: Flip-Book style hardcover (edge shading) --- */
 [data-layout="grid"] .cards-grid {
-  gap: 26px 30px;
-  padding-right: 4px;
+  gap: 24px 18px;
+  padding-right: 2px;
 }
 [data-layout="grid"] .cards-grid .card {
   overflow: visible;
@@ -1058,83 +1057,66 @@ input:checked + .slider::before { transform: translateX(18px); }
   box-shadow: none;
   border-radius: 0;
 }
-[data-layout="grid"] .cards-grid .card-read-btn {
-  display: none;
-}
-[data-layout="grid"] .cards-grid .card-body {
-  padding: 8px 2px 0;
-}
+[data-layout="grid"] .cards-grid .card-read-btn { display: none; }
+[data-layout="grid"] .cards-grid .card-body { padding: 8px 2px 0; }
 [data-layout="grid"] .cards-grid .card-cover {
-  height: 190px;
+  display: block;
+  height: auto;
+  aspect-ratio: 298 / 420;
   background: transparent;
 }
 [data-layout="grid"] .cards-grid .book3d {
   position: relative;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.28)) drop-shadow(7px 11px 11px rgba(0,0,0,0.22));
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: transform 0.15s ease;
 }
 @media (hover: hover) and (pointer: fine) {
-  [data-layout="grid"] .cards-grid .card:hover .book3d {
-    transform: translateY(-5px);
-    filter: drop-shadow(4px 7px 6px rgba(0,0,0,0.32)) drop-shadow(10px 16px 15px rgba(0,0,0,0.26));
-  }
+  [data-layout="grid"] .cards-grid .card:hover .book3d { transform: translateY(-4px); }
 }
-/* Tactile "pressed" feedback on tap/click — works on touch and mouse alike */
-[data-layout="grid"] .cards-grid .card:active {
-  transform: none;
-}
-[data-layout="grid"] .cards-grid .card:active .book3d {
-  transform: scale(0.94);
-  filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.3)) drop-shadow(2px 3px 4px rgba(0,0,0,0.2));
-  transition: transform 0.08s ease, filter 0.08s ease;
-}
-[data-layout="grid"] .cards-grid .book-face {
+[data-layout="grid"] .cards-grid .card:active { transform: none; }
+[data-layout="grid"] .cards-grid .card:active .book3d { transform: scale(0.95); transition: transform 0.08s ease; }
+
+/* कभर: flip book को जस्तै कुना + edge shading + हल्का छाया */
+.book-face {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2.5px 5px 5px 2.5px;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  font-size: 40px;
+  background-color: var(--cover-color, rgb(220, 20, 60));
+  box-shadow: 0 0 5px 0 rgba(25, 25, 25, 0.25);
 }
-/* bent/creased hardcover shading on BOTH edges — alternating light/dark bands */
-[data-layout="grid"] .cards-grid .book-face::before {
+.book-face::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to right,
-      rgba(0,0,0,0.8) 0%,
-      rgba(0,0,0,0.45) 3.5%,
-      rgba(255,255,255,0.38) 6%,
-      rgba(0,0,0,0.35) 9%,
-      rgba(255,255,255,0.16) 12%,
-      rgba(0,0,0,0.12) 15%,
-      rgba(0,0,0,0) 20%),
-    linear-gradient(to left,
-      rgba(0,0,0,0.8) 0%,
-      rgba(0,0,0,0.45) 3.5%,
-      rgba(255,255,255,0.38) 6%,
-      rgba(0,0,0,0.35) 9%,
-      rgba(255,255,255,0.16) 12%,
-      rgba(0,0,0,0.12) 15%,
-      rgba(0,0,0,0) 20%);
+  background: url("../assets/book_edge_shading.webp") center / 100% 100% no-repeat;
   pointer-events: none;
   z-index: 2;
 }
-/* soft overall gloss */
-[data-layout="grid"] .cards-grid .book-face::after {
-  content: "";
+.book-face > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* टेक्स्ट कभर (फोटो नभएको बेला शीर्षक कभरमै) */
+.book-text-cover {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 30%);
-  pointer-events: none;
-  z-index: 2;
+  inset: 9% 9% 9% 15%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  text-align: center;
 }
-[data-layout="grid"] .cards-grid .book-pages {
-  display: none;
+.book-text-title {
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.35;
+  font-size: clamp(14px, 4.6vw, 20px);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  word-break: break-word;
 }
 [data-layout="grid"] .cards-grid .card-bookmark-badge {
   display: flex;

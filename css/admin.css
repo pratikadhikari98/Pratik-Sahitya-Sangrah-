@@ -1,0 +1,102 @@
+/* ===== ADMIN PANEL ===== */
+#adminModal { z-index: 700; }
+.admin-body { padding: 16px 16px 60px; max-width: 640px; margin: 0 auto; }
+.admin-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.admin-note { font-size: 12px; color: var(--text2); line-height: 1.6; margin: 6px 0 12px; }
+.admin-label { display: block; font-size: 12px; color: var(--text2); margin: 12px 0 5px; }
+.admin-input, .admin-select, .admin-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+}
+.admin-textarea { min-height: 260px; line-height: 1.9; resize: vertical; white-space: pre-wrap; }
+.admin-input:focus, .admin-select:focus, .admin-textarea:focus { outline: none; border-color: var(--accent2); }
+.admin-row { display: flex; gap: 10px; }
+.admin-row > * { flex: 1; min-width: 0; }
+.admin-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  background: var(--accent2);
+  color: #fff;
+}
+.admin-btn.ghost { background: var(--bg3); color: var(--text); }
+.admin-btn.danger { background: #c62828; }
+.admin-btn.small { padding: 6px 10px; font-size: 12px; border-radius: 10px; }
+.admin-btn:disabled { opacity: .55; cursor: wait; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.admin-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.admin-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.admin-thumb { width: 42px; flex: none; aspect-ratio: 298 / 420; }
+.admin-thumb .book-text-cover { display: none; }
+.admin-item-info { flex: 1; min-width: 0; }
+.admin-item-title { font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-item-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.admin-seg { display: flex; gap: 8px; }
+.admin-seg button {
+  flex: 1;
+  padding: 9px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.admin-seg button.active { border-color: var(--accent2); background: var(--bg3); font-weight: 700; }
+.admin-cover-box { display: flex; gap: 14px; align-items: flex-start; margin-top: 12px; }
+.admin-preview { width: 110px; flex: none; aspect-ratio: 298 / 420; }
+.admin-cover-tools { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.admin-colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.admin-color { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; }
+.admin-color.active { border-color: var(--text); }
+.admin-check { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 14px; color: var(--text); }
+.admin-msg { margin-top: 12px; padding: 10px 12px; border-radius: 10px; font-size: 13px; background: var(--bg3); color: var(--text); }
+.admin-msg.err { background: #fde8e8; color: #8b1a1a; }
+.admin-section-title { margin-top: 22px; font-size: 13px; font-weight: 700; color: var(--text2); }
+
+/* ===== ZIP UPDATE ===== */
+.zip-drop { border: 2px dashed var(--border); border-radius: 14px; padding: 18px; text-align: center; color: var(--text2); font-size: 13px; line-height: 1.7; margin-top: 12px; }
+.zip-commit { margin-top: 14px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--card-bg); overflow: hidden; }
+.zip-commit-head { padding: 10px 12px; background: var(--bg3); font-size: 12px; color: var(--text2); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.zip-commit-body { padding: 12px; }
+.zip-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; font-size: 12px; }
+.zip-stat { padding: 4px 10px; border-radius: 20px; background: var(--bg3); color: var(--text); }
+.zip-row { padding: 9px 10px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); }
+.zip-row:last-child { border-bottom: none; }
+.zip-row-top { display: flex; align-items: center; gap: 8px; }
+.zip-row-top input[type=checkbox] { flex: none; width: 17px; height: 17px; }
+.zip-path { flex: 1; min-width: 0; word-break: break-all; font-family: monospace; font-size: 12px; }
+.zip-badge { flex: none; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.zip-badge.new { background: #d7f3df; color: #14632e; }
+.zip-badge.mod { background: #fff0c9; color: #7a5200; }
+.zip-badge.del { background: #fde0e0; color: #8b1a1a; }
+.zip-badge.skip { background: var(--bg3); color: var(--text2); }
+.zip-sub { font-size: 11px; color: var(--text2); margin: 4px 0 0 25px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.zip-link { background: none; border: none; color: var(--accent2); font-family: inherit; font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
+.zip-img { max-height: 70px; max-width: 120px; border-radius: 6px; border: 1px solid var(--border); margin: 6px 0 0 25px; display: block; }
+.zip-diff { margin: 6px 0 0 25px; max-height: 260px; overflow: auto; border-radius: 8px; border: 1px solid var(--border); background: #0f1722; font-family: monospace; font-size: 11px; line-height: 1.5; }
+.zip-diff div { padding: 0 8px; white-space: pre-wrap; word-break: break-all; color: #aab4c3; }
+.zip-diff .add { background: rgba(46,160,67,.25); color: #b6f0c3; }
+.zip-diff .rem { background: rgba(248,81,73,.25); color: #ffc9c5; }
+.zip-diff .gap { color: #6b7686; text-align: center; }
+.zip-list { margin-top: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--card-bg); overflow: hidden; }
+.zip-progress { height: 8px; background: var(--bg3); border-radius: 6px; overflow: hidden; margin-top: 10px; }
+.zip-progress > div { height: 100%; width: 0; background: var(--accent2); transition: width .2s; }
