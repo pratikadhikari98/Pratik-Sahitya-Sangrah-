@@ -1094,7 +1094,7 @@ input:checked + .slider::before { transform: translateX(18px); }
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../assets/book_edge_shading.webp") center / 100% 100% no-repeat;
+  background: url("../assets/book_edge_shading_dark.webp") center / 100% 100% no-repeat;
   pointer-events: none;
   z-index: 2;
 }

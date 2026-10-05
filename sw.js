@@ -2,7 +2,7 @@
 // प्रतीक साहित्य संग्रह — Service Worker (PWA)
 // ================================================
 
-const CACHE_NAME = 'pratik-sahitya-v7';
+const CACHE_NAME = 'pratik-sahitya-v8';
 const CACHE_URLS = [
   './',
   './index.html',
@@ -25,7 +25,7 @@ const CACHE_URLS = [
   './css/admin.css',
   './js/admin.js',
   './js/admin-zip.js',
-  './assets/book_edge_shading.webp'
+  './assets/book_edge_shading_dark.webp'
 ];
 
 // ── Install: cache सबै files ──────────────────────
