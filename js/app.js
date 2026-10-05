@@ -94,7 +94,8 @@ function startClock() {
 }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  try { await loadRemoteData(); } catch (e) { console.warn('remote data skipped', e); }
   renderHero();
   renderTags();
   renderCards();
@@ -377,14 +378,7 @@ function createCard(poem, isScroll) {
   return `
     <div class="card ${isScroll ? 'card-scroll' : ''}" onclick="openPoem('${poem.id}')">
       <div class="card-cover">
-        <div class="book3d">
-          <div class="book-pages"></div>
-          <div class="book-face">
-            ${poem.cover
-              ? `<img src="${poem.cover}" style="display:block;width:100%;height:100%;object-fit:cover;" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
-              : `<span class="book-face-emoji">${poem.coverEmoji || '📖'}</span>`}
-          </div>
-        </div>
+        <div class="book3d">${coverFaceHTML(poem)}</div>
         <span class="card-bookmark-badge ${saved ? 'saved' : ''}">${saved ? '🔖' : '🏷️'}</span>
       </div>
       <div class="card-body">
@@ -427,11 +421,6 @@ function openPoem(id) {
     : poem.date;
 
   document.getElementById('modalBody').innerHTML = `
-    <div class="poem-cover-large">
-      ${poem.cover
-        ? `<img src="${poem.cover}" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:16px;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${poem.coverEmoji || '📖'}'}))" />`
-        : poem.coverEmoji}
-    </div>
     <h1 class="poem-title-large">${poem.title}</h1>
     <div class="poem-meta-row">
       <span class="poem-meta-badge accent">${getCategoryLabel(poem.category)}</span>
@@ -530,3 +519,65 @@ function popOverlayStateIfMatches(name) {
   }
 }
 
+
+
+// ===== COVER (flip-book style: फोटो कभर वा टेक्स्ट कभर) =====
+function coverFaceHTML(poem) {
+  const color = /^(#[0-9a-f]{3,8}|rgb\([\d\s,]+\))$/i.test(poem.coverColor || '') ? poem.coverColor : '';
+  const style = color ? ` style="--cover-color:${color}"` : '';
+  if (poem.cover) {
+    return `<div class="book-face" data-id="${poem.id}"${style}><img src="${poem.cover}" alt="" loading="lazy" onerror="coverFallback(this)" /></div>`;
+  }
+  return `<div class="book-face is-text" data-id="${poem.id}"${style}>${textCoverInner(poem.title)}</div>`;
+}
+function textCoverInner(title) {
+  return `<div class="book-text-cover"><div class="book-text-title">${String(title || '').trim()}</div></div>`;
+}
+function coverFallback(img) {
+  const face = img.closest('.book-face');
+  if (!face) return;
+  const poem = KAVITA_DATA.find(p => p.id === face.dataset.id);
+  face.classList.add('is-text');
+  face.innerHTML = textCoverInner(poem ? poem.title : '');
+}
+
+// ===== REMOTE DATA (एडमिन प्यानलले data/poems.json मा लेख्छ) =====
+function escHTML(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function cleanRemotePoem(p) {
+  return Object.assign({}, p, {
+    id: String(p.id || '').replace(/[^\w-]/g, ''),
+    title: escHTML(p.title),
+    category: ['kavita', 'lekh', 'gazal'].includes(p.category) ? p.category : 'kavita',
+    tags: (p.tags || []).map(t => escHTML(String(t).replace(/['"`\\]/g, '').trim())).filter(Boolean),
+    cover: p.cover ? escHTML(p.cover) : '',
+    readTime: escHTML(p.readTime || ''),
+    content: escHTML(p.content),
+    _remote: true
+  });
+}
+function applyRemoteData(db) {
+  window.REMOTE_DB = db || { poems: [], hidden: [], overrides: {} };
+  if (!window.BASE_KAVITA) window.BASE_KAVITA = KAVITA_DATA.slice();
+  const hidden = new Set(window.REMOTE_DB.hidden || []);
+  const ov = window.REMOTE_DB.overrides || {};
+  const merged = window.BASE_KAVITA
+    .filter(p => !hidden.has(p.id))
+    .map(p => ov[p.id] ? Object.assign({}, p, cleanRemotePoem(Object.assign({}, p, ov[p.id]))) : p);
+  (window.REMOTE_DB.poems || []).forEach(p => merged.push(cleanRemotePoem(p)));
+  KAVITA_DATA.length = 0;
+  KAVITA_DATA.push(...merged);
+}
+async function loadRemoteData() {
+  window.BASE_KAVITA = KAVITA_DATA.slice();
+  const res = await fetch('data/poems.json?t=' + Date.now(), { cache: 'no-store' });
+  if (!res.ok) return;
+  applyRemoteData(await res.json());
+}
+function refreshSite() {
+  renderHero();
+  renderTags();
+  renderCards();
+  startHeroAuto();
+}
