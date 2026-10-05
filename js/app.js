@@ -378,7 +378,7 @@ function createCard(poem, isScroll) {
   return `
     <div class="card ${isScroll ? 'card-scroll' : ''}" onclick="openPoem('${poem.id}')">
       <div class="card-cover">
-        <div class="book3d">${coverFaceHTML(poem)}</div>
+        <div class="book3d"><div class="book-pages"></div>${coverFaceHTML(poem)}</div>
         <span class="card-bookmark-badge ${saved ? 'saved' : ''}">${saved ? '🔖' : '🏷️'}</span>
       </div>
       <div class="card-body">
