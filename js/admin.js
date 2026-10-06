@@ -27,11 +27,16 @@
     d.id = 'adminModal';
     d.innerHTML = `
       <div class="modal-content">
-        <div class="modal-header">
-          <button class="modal-back" onclick="closeAdmin()">← फर्कनुस्</button>
-          <span class="admin-title">🔐 एडमिन प्यानल</span>
-          <span style="width:60px"></span>
+        <header class="header modal-site-header">
+      <div class="header-left" onclick="closeAdmin()" style="cursor:pointer" title="गृहपृष्ठ">
+        <div class="logo-icon">📖</div>
+        <div class="logo-text">
+          <span class="logo-main">प्रतीक साहित्य संग्रह</span>
+          <span class="logo-sub">Kavita • Lekh • Gazal</span>
         </div>
+      </div>
+    </header>
+        <div class="admin-title" style="padding:16px 16px 0;font-weight:700">🔐 एडमिन प्यानल</div>
         <div class="admin-body" id="adminBody"></div>
       </div>`;
     document.body.appendChild(d);

@@ -170,14 +170,20 @@
 <!-- POEM MODAL -->
 <div class="modal-overlay" id="poemModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <button class="modal-back" onclick="closeModal()">← <span data-en="Back" data-ne="फर्कनुस्">फर्कनुस्</span></button>
-      <div class="modal-actions">
+    <header class="header modal-site-header">
+      <div class="header-left" onclick="closeModal()" style="cursor:pointer" title="गृहपृष्ठ">
+        <div class="logo-icon">📖</div>
+        <div class="logo-text">
+          <span class="logo-main">प्रतीक साहित्य संग्रह</span>
+          <span class="logo-sub">Kavita • Lekh • Gazal</span>
+        </div>
+      </div>
+      <div class="header-right">
         <button class="icon-btn" id="bookmarkBtn" onclick="toggleBookmark()" title="Bookmark">🔖</button>
         <button class="icon-btn" onclick="sharePoem()" title="Share">📤</button>
         <button class="icon-btn" onclick="window.print()" title="Print">🖨️</button>
       </div>
-    </div>
+    </header>
     <div class="modal-body" id="modalBody">
       <!-- Content inserted by JS -->
     </div>
@@ -187,10 +193,16 @@
 <!-- BOOKMARKS MODAL -->
 <div class="modal-overlay" id="bookmarkModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <button class="modal-back" onclick="closeBookmarkModal()">← <span data-en="Back" data-ne="फर्कनुस्">फर्कनुस्</span></button>
-      <h3>🔖 <span data-en="Saved Poems" data-ne="सेभ गरिएका">सेभ गरिएका</span></h3>
-    </div>
+    <header class="header modal-site-header">
+      <div class="header-left" onclick="closeBookmarkModal()" style="cursor:pointer" title="गृहपृष्ठ">
+        <div class="logo-icon">📖</div>
+        <div class="logo-text">
+          <span class="logo-main">प्रतीक साहित्य संग्रह</span>
+          <span class="logo-sub">Kavita • Lekh • Gazal</span>
+        </div>
+      </div>
+    </header>
+    <h3 style="padding:16px 16px 0;margin:0">🔖 <span data-en="Saved Poems" data-ne="सेभ गरिएका">सेभ गरिएका</span></h3>
     <div class="modal-body" id="bookmarkBody"></div>
   </div>
 </div>
