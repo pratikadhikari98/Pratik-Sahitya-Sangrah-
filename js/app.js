@@ -161,6 +161,7 @@ function renderHero() {
   heroSlides = [...KAVITA_DATA].sort(() => Math.random() - 0.5);
   const container = document.getElementById('heroSlides');
   const dotsContainer = document.getElementById('heroDots');
+  if (!container || !dotsContainer) return;
 
   container.innerHTML = heroSlides.map(p => `
     <div class="hero-slide" onclick="openPoem('${p.id}')" ${!p.cover ? 'style="background: linear-gradient(135deg,#1a2744 0%,#2d4a7a 100%)"' : ''}>
@@ -186,11 +187,13 @@ function renderHero() {
 
 function goToSlide(index) {
   heroIndex = index;
+  if (!document.getElementById('heroSlides')) return;
   document.getElementById('heroSlides').style.transform = `translateX(-${heroIndex * 100}%)`;
   document.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === heroIndex));
 }
 
 function startHeroAuto() {
+  if (!document.getElementById('heroSlides')) return;
   if (heroInterval) clearInterval(heroInterval);
   heroInterval = setInterval(() => {
     heroIndex = (heroIndex + 1) % (heroSlides.length || 1);
@@ -322,6 +325,7 @@ function setupBlackboardSwipe() {
 function renderTags() {
   const allTags = [...new Set(KAVITA_DATA.flatMap(p => p.tags))];
   const wrap = document.getElementById('tagFilterWrap');
+  if (!wrap) return;
   wrap.innerHTML =
     `<button class="tag-chip active" onclick="filterByTag(null, this)">${isEnglish ? 'All' : 'सबै'}</button>` +
     allTags.map(t => `<button class="tag-chip" onclick="filterByTag('${t}', this)">#${t}</button>`).join('');
