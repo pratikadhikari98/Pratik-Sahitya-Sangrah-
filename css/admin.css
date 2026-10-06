@@ -100,37 +100,3 @@
 .zip-list { margin-top: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--card-bg); overflow: hidden; }
 .zip-progress { height: 8px; background: var(--bg3); border-radius: 6px; overflow: hidden; margin-top: 10px; }
 .zip-progress > div { height: 100%; width: 0; background: var(--accent2); transition: width .2s; }
-
-/* ===== नयाँ सुविधाहरू: toolbar, फिल्टर, क्रम, ट्याग chip, क्रप, पूर्वावलोकन ===== */
-.admin-actions { flex-wrap: wrap; }
-.admin-toolbar .admin-btn { flex: 1 1 auto; }
-.admin-filter { margin-top: 12px; }
-.admin-filter .admin-input { margin-bottom: 8px; }
-.admin-orderbar { position: sticky; top: 70px; z-index: 5; background: var(--modal-bg); padding: 8px 0; }
-.admin-inline { display: flex; gap: 8px; align-items: center; }
-.admin-inline .admin-input { flex: 1; min-width: 0; }
-.admin-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
-.admin-chip {
-  border: 1px solid var(--border); background: var(--tag-bg); color: var(--text2);
-  border-radius: 12px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-family: inherit;
-}
-.admin-chip.on { background: var(--accent2, #1e5aa8); color: #fff; border-color: transparent; }
-.admin-news-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px; }
-.admin-news-row .admin-textarea { flex: 1; min-height: 56px; margin: 0; }
-.admin-news-btns { display: flex; flex-direction: column; gap: 4px; }
-.admin-btn[disabled] { opacity: 0.4; pointer-events: none; }
-
-.ax-overlay {
-  position: fixed; inset: 0; z-index: 800; background: rgba(0,0,0,0.6);
-  display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
-}
-.ax-box { background: var(--modal-bg); color: var(--text); border-radius: 16px; padding: 16px; text-align: center; max-width: 340px; width: 100%; }
-.ax-title { font-weight: 700; margin-bottom: 10px; }
-.ax-crop-view {
-  position: relative; width: 240px; height: 320px; margin: 0 auto 10px; overflow: hidden;
-  background: #000; border-radius: 10px; touch-action: none; cursor: grab;
-}
-.ax-crop-view img { position: absolute; left: 0; top: 0; transform-origin: 0 0; max-width: none; user-select: none; pointer-events: none; }
-.ax-range { width: 240px; }
-.ax-preview { background: var(--modal-bg); display: block; padding: 0; }
-.ax-preview-bar { position: sticky; top: 0; z-index: 2; display: flex; gap: 8px; padding: 10px 16px; background: var(--modal-bg); border-bottom: 1px solid var(--border); }
