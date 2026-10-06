@@ -1243,3 +1243,15 @@ input:checked + .slider::before { transform: translateX(18px); }
 .rc-hint { margin-top: 6px; font-size: 13px; color: var(--text2); }
 
 #randomModal { z-index: 450; } /* कविता modal (500) माथि खुलोस् */
+
+/* कार्ड स्ट्याक: पर्दाको बीचमा (ठाडो र तेर्सो) */
+#randomModal .modal-content { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+#randomModal .rc-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 70px;
+}
+#randomModal .rc-stage { margin: 28px auto 22px; left: 7%; } /* बायाँतिर फैलिएको थुप्रोलाई बीचमा ल्याउन */
