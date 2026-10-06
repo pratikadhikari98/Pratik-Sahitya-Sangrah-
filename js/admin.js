@@ -1,7 +1,7 @@
 // ============================================================
 //  ADMIN.JS — एडमिन प्यानल (GitHub API बाट वेबसाइट भित्रैबाट कविता/कभर थप्ने, हटाउने)
 //  डाटा  : data/poems.json  (नयाँ रचना + लुकाइएका + सम्पादित)
-//  फोटो : covers/admin-*.jpg
+//  फोटो : covers/admin-*.webp
 // ============================================================
 (function () {
   const LS_KEY = 'sahitya_admin_cfg';
@@ -143,9 +143,9 @@
       if (f && f.sha) await api(path, 'DELETE', { message: 'Remove cover ' + path, sha: f.sha, branch: cfg.branch || 'main' });
     } catch (e) { /* फोटो हटाउन नसके पनि ठीक छ */ }
   }
-  const isAdminCover = p => /^covers\/admin-[\w-]+\.jpg$/.test(p || '');
+  const isAdminCover = p => /^covers\/admin-[\w-]+\.(webp|jpg)$/.test(p || '');
 
-  // फोटो घटाएर JPEG बनाउने (धेरै ठूलो फोटोले साइट ढिलो नहोस्)
+  // फोटो घटाएर WebP बनाउने (WebP नमिल्ने ब्राउजरमा JPEG) (धेरै ठूलो फोटोले साइट ढिलो नहोस्)
   function compressImage(file, maxSide) {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -160,7 +160,10 @@
         ctx.fillRect(0, 0, c.width, c.height);
         ctx.drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
-        resolve(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+        let out = c.toDataURL('image/webp', 0.85);
+        let ext = 'webp';
+        if (!out.startsWith('data:image/webp')) { out = c.toDataURL('image/jpeg', 0.85); ext = 'jpg'; }
+        resolve({ b64: out.split(',')[1], ext });
       };
       img.onerror = () => reject(new Error('फोटो पढ्न सकिएन'));
       img.src = url;
@@ -415,8 +418,8 @@
       let newCover = form.mode === 'image' ? form.poem.cover : '';
       let uploaded = null;
       if (form.mode === 'image' && form.file) {
-        const b64 = await compressImage(form.file, 1000);
-        uploaded = `covers/admin-${p.id}-${Date.now().toString(36)}.jpg`;
+        const { b64, ext } = await compressImage(form.file, 1000);
+        uploaded = `covers/admin-${p.id}-${Date.now().toString(36)}.${ext}`;
         await api(uploaded, 'PUT', { message: 'Add cover for ' + p.title, content: b64, branch: cfg.branch || 'main' });
         newCover = uploaded;
       }
