@@ -173,6 +173,30 @@
   </div>
 </div>
 
+<!-- RANDOM CARD STACK MODAL -->
+<div class="modal-overlay" id="randomModal">
+  <div class="modal-content">
+    <header class="header modal-site-header">
+      <div class="header-left" onclick="closeRandomStack()" style="cursor:pointer" title="गृहपृष्ठ">
+        <div class="logo-icon">📖</div>
+        <div class="logo-text">
+          <span class="logo-main">प्रतीक साहित्य संग्रह</span>
+          <span class="logo-sub">Kavita • Lekh • Gazal</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" onclick="shuffleRandomStack()" title="मिसाउनुस्">🎲</button>
+      </div>
+    </header>
+    <div class="rc-wrap">
+      <h3 class="rc-heading">🎲 अनियमित कविता</h3>
+      <div class="rc-stage" id="rcStage"></div>
+      <div class="rc-title" id="rcTitle"></div>
+      <div class="rc-hint">मन परेको कभरमा छुनुस् — कविता खुल्छ। औँलाले swipe पनि गर्न सकिन्छ।</div>
+    </div>
+  </div>
+</div>
+
 <!-- BOOKMARKS MODAL -->
 <div class="modal-overlay" id="bookmarkModal">
   <div class="modal-content">

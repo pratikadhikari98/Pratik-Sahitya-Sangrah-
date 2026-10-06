@@ -149,6 +149,13 @@ window.addEventListener('popstate', () => {
     bookmarkModal.classList.remove('open');
     document.body.style.overflow = '';
   }
+  const rm = document.getElementById('randomModal');
+  if (rm && rm.classList.contains('open') && !(history.state && history.state.overlay === 'random')) {
+    rm.classList.remove('open');
+    rcStopAuto();
+    document.body.style.overflow = '';
+  }
+  if (rm && rm.classList.contains('open')) document.body.style.overflow = 'hidden';
   // Also close the 3-dots dropdown menu if open
   const dropdown = document.getElementById('dropdownMenu');
   if (dropdown && dropdown.classList.contains('open')) {
@@ -448,7 +455,7 @@ function openPoem(id) {
 function closeModal() {
   if (!document.getElementById('poemModal').classList.contains('open')) return;
   document.getElementById('poemModal').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow = document.getElementById('randomModal').classList.contains('open') ? 'hidden' : '';
   currentPoem = null;
 
   popOverlayStateIfMatches('poem');
@@ -470,9 +477,158 @@ function filterByTagFromModal(tag) {
 // ===== RANDOM POEM =====
 function showRandomPoem() {
   closeDropdown();
-  const idx = Math.floor(Math.random() * KAVITA_DATA.length);
-  openPoem(KAVITA_DATA[idx].id);
+  openRandomStack();
 }
+
+// ===== RANDOM CARD STACK =====
+// कभरहरू कार्डको थुप्रोमा आफैं सर्छन् (auto), swipe गर्न मिल्छ, कार्डमा छुँदा कविता खुल्छ।
+let rcOrder = [], rcActive = 0, rcTimer = null, rcDown = false, rcStartX = 0, rcMoved = false;
+
+function rcPose(d, n) {
+  // d = अगाडिको कार्डबाट कति पछाडि (0 = अगाडि)
+  if (d < 0) return { t: 'translateX(-120%) rotateY(-24deg) translateZ(-120px)', o: 0, dim: 0 };
+  const k = Math.min(d, 4);
+  const x = [0, -11, -19, -27, -35][k];
+  const z = [0, -160, -180, -200, -220][k];
+  const r = [0, -6, -8, -10, -12][k];
+  return {
+    t: `translateX(${x}%) rotateZ(${r}deg) translateZ(${z}px)`,
+    o: d > 4 ? 0 : 1,
+    dim: [0, 0.18, 0.3, 0.4, 0.5][k]
+  };
+}
+function rcApply(el, pose) {
+  el.style.transform = pose.t;
+  el.style.opacity = pose.o;
+  el.style.setProperty('--rc-dim', pose.dim);
+  el.style.pointerEvents = pose.o ? 'auto' : 'none';
+}
+function rcLayout() {
+  const n = rcOrder.length;
+  const cards = document.querySelectorAll('#rcStage .rc-card');
+  cards.forEach((el, i) => {
+    const d = (i - rcActive + n) % n;
+    el.style.zIndex = String(n - d);
+    rcApply(el, rcPose(d, n));
+  });
+  const poem = rcOrder[rcActive];
+  const t = document.getElementById('rcTitle');
+  if (t && poem) t.innerHTML = poem.title;
+}
+function rcBuild() {
+  const stage = document.getElementById('rcStage');
+  rcOrder = [...KAVITA_DATA].sort(() => Math.random() - 0.5);
+  rcActive = 0;
+  stage.innerHTML = rcOrder.map((p, i) =>
+    `<div class="rc-card" data-i="${i}">${coverFaceHTML(p)}</div>`).join('');
+  rcLayout();
+}
+function rcNext() {
+  const n = rcOrder.length;
+  if (n < 2) return;
+  const cards = document.querySelectorAll('#rcStage .rc-card');
+  const leaving = cards[rcActive];
+  rcActive = (rcActive + 1) % n;
+  // अगाडिको कार्ड बायाँतिर उडेर पछाडि जान्छ
+  rcApply(leaving, rcPose(-1, n));
+  leaving.style.zIndex = String(n + 1);
+  rcLayoutOthers(leaving);
+  setTimeout(() => {
+    leaving.style.transition = 'none';
+    leaving.style.zIndex = '0';
+    rcApply(leaving, rcPose(n - 1, n));
+    void leaving.offsetWidth;
+    leaving.style.transition = '';
+  }, 580);
+  rcUpdateTitle();
+}
+function rcPrev() {
+  const n = rcOrder.length;
+  if (n < 2) return;
+  const cards = document.querySelectorAll('#rcStage .rc-card');
+  rcActive = (rcActive - 1 + n) % n;
+  const coming = cards[rcActive];
+  // पछाडिबाट आउने कार्ड बायाँतिरबाट अगाडि आउँछ
+  coming.style.transition = 'none';
+  rcApply(coming, rcPose(-1, n));
+  coming.style.zIndex = String(n + 1);
+  void coming.offsetWidth;
+  coming.style.transition = '';
+  rcApply(coming, rcPose(0, n));
+  rcLayoutOthers(coming);
+  rcUpdateTitle();
+}
+function rcLayoutOthers(skip) {
+  const n = rcOrder.length;
+  document.querySelectorAll('#rcStage .rc-card').forEach((el, i) => {
+    if (el === skip) return;
+    const d = (i - rcActive + n) % n;
+    el.style.zIndex = String(n - d);
+    rcApply(el, rcPose(d, n));
+  });
+}
+function rcUpdateTitle() {
+  const poem = rcOrder[rcActive];
+  const t = document.getElementById('rcTitle');
+  if (t && poem) t.innerHTML = poem.title;
+}
+function rcStartAuto() {
+  rcStopAuto();
+  rcTimer = setInterval(() => {
+    const poemOpen = document.getElementById('poemModal').classList.contains('open');
+    if (rcDown || poemOpen) return;
+    rcNext();
+  }, 2800);
+}
+function rcStopAuto() { if (rcTimer) { clearInterval(rcTimer); rcTimer = null; } }
+
+function rcSetupGestures() {
+  const stage = document.getElementById('rcStage');
+  if (stage.dataset.ready) return;
+  stage.dataset.ready = '1';
+  stage.addEventListener('pointerdown', e => { rcDown = true; rcMoved = false; rcStartX = e.clientX; });
+  stage.addEventListener('pointermove', e => { if (rcDown && Math.abs(e.clientX - rcStartX) > 10) rcMoved = true; });
+  const end = e => {
+    if (!rcDown) return;
+    rcDown = false;
+    const dx = e.clientX - rcStartX;
+    if (Math.abs(dx) > 40) {
+      dx < 0 ? rcNext() : rcPrev();
+      rcStartAuto();
+      return;
+    }
+    if (!rcMoved && e.type === 'pointerup') {
+      const card = e.target.closest('.rc-card');
+      if (card) {
+        const poem = rcOrder[+card.dataset.i];
+        if (poem) openPoem(poem.id);
+      }
+    }
+  };
+  stage.addEventListener('pointerup', end);
+  stage.addEventListener('pointercancel', end);
+  stage.addEventListener('pointerleave', e => { if (rcDown) { rcDown = false; } });
+}
+
+function openRandomStack() {
+  if (!KAVITA_DATA.length) return;
+  const m = document.getElementById('randomModal');
+  rcBuild();
+  rcSetupGestures();
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  pushOverlayState('random');
+  rcStartAuto();
+}
+function closeRandomStack() {
+  const m = document.getElementById('randomModal');
+  if (!m.classList.contains('open')) return;
+  m.classList.remove('open');
+  rcStopAuto();
+  if (!document.getElementById('poemModal').classList.contains('open')) document.body.style.overflow = '';
+  popOverlayStateIfMatches('random');
+}
+function shuffleRandomStack() { rcBuild(); rcStartAuto(); }
 
 // ===== SECTION NAV =====
 function showSection(section) {

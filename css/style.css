@@ -1195,3 +1195,51 @@ input:checked + .slider::before { transform: translateX(18px); }
   0%,100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
 }
+
+
+/* ===== RANDOM CARD STACK (कभर कार्ड स्ट्याक) ===== */
+.rc-wrap { padding: 8px 16px 40px; text-align: center; }
+.rc-heading { margin: 14px 0 0; color: var(--text); font-size: 20px; }
+.rc-stage {
+  position: relative;
+  width: min(72vw, 300px);
+  aspect-ratio: 3 / 4;
+  margin: 34px auto 26px;
+  perspective: 1000px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.rc-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.38);
+  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.55s ease;
+  will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
+}
+.rc-card .book-face { border-radius: 16px; }
+.rc-card .book-text-title { font-size: clamp(18px, 6vw, 26px); }
+.rc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #000;
+  opacity: var(--rc-dim, 0);
+  transition: opacity 0.55s ease;
+  pointer-events: none;
+}
+.rc-title {
+  min-height: 28px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 0 8px;
+}
+.rc-hint { margin-top: 6px; font-size: 13px; color: var(--text2); }
+
+#randomModal { z-index: 450; } /* कविता modal (500) माथि खुलोस् */

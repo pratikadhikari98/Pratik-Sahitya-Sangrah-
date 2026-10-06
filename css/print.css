@@ -1,6 +1,6 @@
 @media print {
   .header, .bottom-nav, .category-tabs, .tag-filter-wrap,
-  .modal-header, .modal-site-header, .modal-actions, .share-modal, .toast,
+  .modal-header, .modal-site-header, #randomModal, .modal-actions, .share-modal, .toast,
   .hero-section, .section-header .random-btn,
   .card-read-btn, .dropdown-menu, .search-bar-wrap { display: none !important; }
 
