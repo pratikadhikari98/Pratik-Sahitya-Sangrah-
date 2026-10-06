@@ -165,7 +165,14 @@ window.addEventListener('popstate', () => {
 
 // ===== HERO SLIDES =====
 function renderHero() {
-  heroSlides = [...KAVITA_DATA].sort(() => Math.random() - 0.5);
+  const savedOrder = window.REMOTE_DB && Array.isArray(window.REMOTE_DB.order) && window.REMOTE_DB.order.length;
+  if (savedOrder) {
+    // एडमिनले क्रम मिलाएको छ भने: featured (भए) सोही क्रममा, नभए सबै
+    const feat = KAVITA_DATA.filter(p => p.featured);
+    heroSlides = feat.length ? feat : [...KAVITA_DATA];
+  } else {
+    heroSlides = [...KAVITA_DATA].sort(() => Math.random() - 0.5);
+  }
   const container = document.getElementById('heroSlides');
   const dotsContainer = document.getElementById('heroDots');
   if (!container || !dotsContainer) return;
@@ -726,16 +733,44 @@ function applyRemoteData(db) {
     .filter(p => !hidden.has(p.id))
     .map(p => ov[p.id] ? Object.assign({}, p, cleanRemotePoem(Object.assign({}, p, ov[p.id]))) : p);
   (window.REMOTE_DB.poems || []).forEach(p => merged.push(cleanRemotePoem(p)));
+  // Draft रचना सार्वजनिक साइटमा देखिँदैन
+  let visible = merged.filter(p => !p.draft);
+  // एडमिनले सेभ गरेको क्रम (भए)
+  const order = Array.isArray(window.REMOTE_DB.order) ? window.REMOTE_DB.order : [];
+  if (order.length) {
+    const idx = new Map(order.map((id, i) => [id, i]));
+    visible = visible.map((p, i) => ({ p, k: idx.has(p.id) ? idx.get(p.id) : 1e6 + i }))
+      .sort((a, b) => a.k - b.k).map(o => o.p);
+  }
   KAVITA_DATA.length = 0;
-  KAVITA_DATA.push(...merged);
+  KAVITA_DATA.push(...visible);
+
+  // सूचनाहरू (एडमिनले सम्पादन गरेको भए त्यही, नत्र news/*.js का)
+  if (!window.BASE_NEWS) window.BASE_NEWS = NEWS_DATA.slice();
+  NEWS_DATA.length = 0;
+  if (Array.isArray(window.REMOTE_DB.news)) {
+    window.REMOTE_DB.news.forEach(n => NEWS_DATA.push({ id: String(n.id || '').replace(/[^\w-]/g, ''), text: escHTML(n.text) }));
+  } else {
+    NEWS_DATA.push(...window.BASE_NEWS);
+  }
+  applySiteSettings(window.REMOTE_DB.site);
+}
+// साइटको नाम (एडमिन → साइट)
+function applySiteSettings(site) {
+  const name = site && typeof site.siteName === 'string' ? site.siteName.trim() : '';
+  if (!name) return;
+  document.querySelectorAll('.logo-main').forEach(el => { el.textContent = name; });
+  document.title = name;
 }
 async function loadRemoteData() {
   window.BASE_KAVITA = KAVITA_DATA.slice();
+  window.BASE_NEWS = NEWS_DATA.slice();
   const res = await fetch('data/poems.json?t=' + Date.now(), { cache: 'no-store' });
   if (!res.ok) return;
   applyRemoteData(await res.json());
 }
 function refreshSite() {
+  renderBlackboard();
   renderHero();
   renderTags();
   renderCards();

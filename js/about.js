@@ -1,6 +1,28 @@
 // ===== ABOUT.JS — Clean profile-card About page =====
 
-document.addEventListener('DOMContentLoaded', () => {
+const aEsc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// एडमिन → साइट मा बदलिएको विवरण (data/poems.json) ले data/about.js लाई ओभरराइड गर्छ
+async function applyRemoteAbout() {
+  try {
+    const res = await fetch('data/poems.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) return;
+    const site = (await res.json()).site || {};
+    const ab = site.about || {};
+    const d = ABOUT_DATA;
+    if (ab.name) d.name = ab.name;
+    if (ab.subtitle) d.subtitle = ab.subtitle;
+    if (ab.location) d.location = ab.location;
+    if (ab.photo && /^(covers\/[\w.\-]+|https:\/\/[^\s"'<>]+)$/.test(ab.photo)) d.photo = ab.photo;
+    d.contact = d.contact || {};
+    if (ab.phone && /^[+\d\s\-]{5,20}$/.test(ab.phone)) d.contact.phone = ab.phone;
+    if (ab.email && /^[^\s@<>"']+@[^\s@<>"']+$/.test(ab.email)) d.contact.email = ab.email;
+    if (ab.facebook && /^https?:\/\/[^\s"'<>]+$/.test(ab.facebook)) d.contact.facebook = ab.facebook;
+  } catch (e) { /* डिफल्ट विवरण नै चल्छ */ }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await applyRemoteAbout();
   renderProfile();
   renderContact();
   renderSites();
@@ -22,7 +44,7 @@ function renderProfile() {
 
   const locEl = document.getElementById('profileLocation');
   if (d.location) {
-    locEl.innerHTML = `📍 ${d.location}`;
+    locEl.innerHTML = `📍 ${aEsc(d.location)}`;
   } else {
     locEl.style.display = 'none';
   }
@@ -53,7 +75,7 @@ function renderContact() {
       <span class="c-icon">${r.icon}</span>
       <div class="contact-btn-inner">
         <span class="c-label">${r.label}</span>
-        <span class="c-name">${r.value}</span>
+        <span class="c-name">${aEsc(r.value)}</span>
       </div>
     ${r.href ? '</a>' : '</div>'}
   `).join('');
